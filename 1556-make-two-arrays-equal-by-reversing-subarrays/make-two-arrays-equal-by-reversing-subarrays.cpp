@@ -1,13 +1,14 @@
 class Solution {
 public:
     bool canBeEqual(vector<int>& target, vector<int>& arr) {
-        sort(target.begin(), target.end());
-        sort(arr.begin(), arr.end());
-        for(int i=0; i < target.size();i++){
-            if(target[i] != arr[i]){
-                return false;
-            }
+        vector<int> tarCnt(1001);
+        vector<int> arrCnt(1001);
+        for(auto &t: target){
+            ++tarCnt[t];
         }
-        return true;
+        for(auto &a: arr){
+            ++arrCnt[a];
+        }
+        return tarCnt == arrCnt;
     }
 };
