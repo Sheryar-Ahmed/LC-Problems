@@ -1,83 +1,108 @@
-#include <unordered_map>
-#include <string>
-#include <vector>
-#include <algorithm>
-
-using namespace std;
-
 class Solution {
 public:
+    string one(int num) {
+    switch(num) {
+      case 1: return "One";
+      case 2: return "Two";
+      case 3: return "Three";
+      case 4: return "Four";
+      case 5: return "Five";
+      case 6: return "Six";
+      case 7: return "Seven";
+      case 8: return "Eight";
+      case 9: return "Nine";
+    }
+    return "";
+  }
+
+  string twoLessThan20(int num) {
+    switch(num) {
+      case 10: return "Ten";
+      case 11: return "Eleven";
+      case 12: return "Twelve";
+      case 13: return "Thirteen";
+      case 14: return "Fourteen";
+      case 15: return "Fifteen";
+      case 16: return "Sixteen";
+      case 17: return "Seventeen";
+      case 18: return "Eighteen";
+      case 19: return "Nineteen";
+    }
+    return "";
+  }
+
+  string ten(int num) {
+    switch(num) {
+      case 2: return "Twenty";
+      case 3: return "Thirty";
+      case 4: return "Forty";
+      case 5: return "Fifty";
+      case 6: return "Sixty";
+      case 7: return "Seventy";
+      case 8: return "Eighty";
+      case 9: return "Ninety";
+    }
+    return "";
+  }
+
+  string two(int num) {
+    if (num == 0)
+      return "";
+    else if (num < 10)
+      return one(num);
+    else if (num < 20)
+      return twoLessThan20(num);
+    else {
+      int tenner = num / 10;
+      int rest = num - tenner * 10;
+      if (rest != 0)
+        return ten(tenner) + " " + one(rest);
+      else
+        return ten(tenner);
+    }
+  }
+
+  string three(int num) {
+    int hundred = num / 100;
+    int rest = num - hundred * 100;
+    string res = "";
+    if (hundred*rest != 0)
+      res = one(hundred) + " Hundred " + two(rest);
+    else if ((hundred == 0) && (rest != 0))
+      res = two(rest);
+    else if ((hundred != 0) && (rest == 0))
+      res = one(hundred) + " Hundred";
+    return res;
+  }
+
     string numberToWords(int num) {
-        if (num == 0) return "Zero";
-        
-        unordered_map<int, string> map = {
-            {0, "Zero"}, {1, "One"}, {2, "Two"}, {3, "Three"}, {4, "Four"},
-            {5, "Five"}, {6, "Six"}, {7, "Seven"}, {8, "Eight"}, {9, "Nine"},
-            {10, "Ten"}, {11, "Eleven"}, {12, "Twelve"}, {13, "Thirteen"}, {14, "Fourteen"},
-            {15, "Fifteen"}, {16, "Sixteen"}, {17, "Seventeen"}, {18, "Eighteen"}, {19, "Nineteen"},
-            {20, "Twenty"}, {30, "Thirty"}, {40, "Forty"}, {50, "Fifty"},
-            {60, "Sixty"}, {70, "Seventy"}, {80, "Eighty"}, {90, "Ninety"},
-            {100, "Hundred"}, {1000, "Thousand"}, {1000000, "Million"}, {1000000000, "Billion"}
-        };
+        if (num == 0)
+      return "Zero";
 
-        vector<int> groupNo = {1000000000, 1000000, 1000, 1};
-        vector<string> groupName = {"Billion", "Million", "Thousand", ""};
+    int billion = num / 1000000000;
+    int million = (num - billion * 1000000000) / 1000000;
+    int thousand = (num - billion * 1000000000 - million * 1000000) / 1000;
+    int rest = num - billion * 1000000000 - million * 1000000 - thousand * 1000;
 
-        string ans;
-        for (int i = 0; i < groupNo.size(); ++i) {
-            if (num >= groupNo[i]) {
-                ans += createChunk(num / groupNo[i]) + (groupName[i].empty() ? "" : " " + groupName[i]) + " ";
-                num %= groupNo[i];
-            }
-        }
-
-        // Trim any trailing spaces
-        while (!ans.empty() && isspace(ans.back())) {
-            ans.pop_back();
-        }
-
-        return ans;
+    string result = "";
+    if (billion != 0)
+      result = three(billion) + " Billion";
+    if (million != 0) {
+      if (result.size()!=0)
+        result += " ";
+      result += three(million) + " Million";
+    }
+    if (thousand != 0) {
+      if (result.size()!=0)
+        result += " ";
+      result += three(thousand) + " Thousand";
+    }
+    if (rest != 0) {
+      if (result.size()!=0)
+        result += " ";
+      result += three(rest);
+    }
+    return result;
     }
 
-private:
-    string createChunk(int num) {
-        unordered_map<int, string> map = {
-            {0, "Zero"}, {1, "One"}, {2, "Two"}, {3, "Three"}, {4, "Four"},
-            {5, "Five"}, {6, "Six"}, {7, "Seven"}, {8, "Eight"}, {9, "Nine"},
-            {10, "Ten"}, {11, "Eleven"}, {12, "Twelve"}, {13, "Thirteen"}, {14, "Fourteen"},
-            {15, "Fifteen"}, {16, "Sixteen"}, {17, "Seventeen"}, {18, "Eighteen"}, {19, "Nineteen"},
-            {20, "Twenty"}, {30, "Thirty"}, {40, "Forty"}, {50, "Fifty"},
-            {60, "Sixty"}, {70, "Seventy"}, {80, "Eighty"}, {90, "Ninety"},
-            {100, "Hundred"}
-        };
-
-        string res;
-        if (num >= 100) {
-            res += map[num / 100] + " Hundred ";
-            num %= 100;
-        }
-        if (num >= 20) {
-            res += map[(num / 10) * 10] + " ";
-            num %= 10;
-        }
-        if (num > 0) {
-            res += map[num] + " ";
-        }
-
-        // Trim any trailing spaces
-        while (!res.empty() && isspace(res.back())) {
-            res.pop_back();
-        }
-
-        return res;
-    }
 };
-
-// Example usage:
-// int main() {
-//     Solution solution;
-//     cout << solution.numberToWords(123) << endl;       // Output: "One Hundred Twenty Three"
-//     cout << solution.numberToWords(12345) << endl;     // Output: "Twelve Thousand Three Hundred Forty Five"
-//     cout << solution.numberToWords(1234567) << endl;   // Output: "One Million Two Hundred Thirty Four Thousand Five Hundred Sixty Seven"
-//     return 0;
-// }
