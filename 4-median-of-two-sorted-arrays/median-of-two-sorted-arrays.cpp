@@ -1,34 +1,37 @@
 class Solution {
 public:
     double findMedianSortedArrays(vector<int>& nums1, vector<int>& nums2) {
-        vector<int> merged;
-        
-        // Merge the two arrays
-        int i = 0, j = 0;
-        while (i < nums1.size() && j < nums2.size()) {
-            if (nums1[i] < nums2[j]) {
-                merged.push_back(nums1[i]);
-                i++;
-            } else {
-                merged.push_back(nums2[j]);
-                j++;
-            }
-        }
-        while (i < nums1.size()) {
-            merged.push_back(nums1[i]);
-            i++;
-        }
-        while (j < nums2.size()) {
-            merged.push_back(nums2[j]);
-            j++;
+        vector<int>& A = nums1;
+        vector<int>& B = nums2;
+        int total = A.size() + B.size();
+        int half = (total + 1) / 2;
+
+        if (B.size() < A.size()) {
+            swap(A, B);
         }
 
-        // Calculate the median
-        int n = merged.size();
-        if (n % 2 == 1) {
-            return static_cast<double>(merged[n / 2]);
-        } else {
-            return (static_cast<double>(merged[n / 2 - 1]) + merged[n / 2]) / 2.0;
+        int l = 0;
+        int r = A.size();
+        while (l <= r) {
+            int i = (l + r) / 2;
+            int j = half - i;
+
+            int Aleft = i > 0 ? A[i - 1] : INT_MIN;
+            int Aright = i < A.size() ? A[i] : INT_MAX;
+            int Bleft = j > 0 ? B[j - 1] : INT_MIN;
+            int Bright = j < B.size() ? B[j] : INT_MAX;
+
+            if (Aleft <= Bright && Bleft <= Aright) {
+                if (total % 2 != 0) {
+                    return max(Aleft, Bleft);
+                }
+                return (max(Aleft, Bleft) + min(Aright, Bright)) / 2.0;
+            } else if (Aleft > Bright) {
+                r = i - 1;
+            } else {
+                l = i + 1;
+            }
         }
+        return -1;
     }
 };
