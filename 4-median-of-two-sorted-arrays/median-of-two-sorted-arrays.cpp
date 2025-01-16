@@ -1,37 +1,44 @@
 class Solution {
 public:
     double findMedianSortedArrays(vector<int>& nums1, vector<int>& nums2) {
-        vector<int>& A = nums1;
-        vector<int>& B = nums2;
-        int total = A.size() + B.size();
-        int half = (total + 1) / 2;
-
-        if (B.size() < A.size()) {
-            swap(A, B);
+        // Ensure nums1 is the smaller array
+        if (nums1.size() > nums2.size()) {
+            return findMedianSortedArrays(nums2, nums1);
         }
+        
+        int n1 = nums1.size();
+        int n2 = nums2.size();
+        int low = 0, high = n1;
 
-        int l = 0;
-        int r = A.size();
-        while (l <= r) {
-            int i = (l + r) / 2;
-            int j = half - i;
+        while (low <= high) {
+            int partition1 = low + (high - low) / 2;
+            int partition2 = (n1 + n2 + 1) / 2 - partition1;
 
-            int Aleft = i > 0 ? A[i - 1] : INT_MIN;
-            int Aright = i < A.size() ? A[i] : INT_MAX;
-            int Bleft = j > 0 ? B[j - 1] : INT_MIN;
-            int Bright = j < B.size() ? B[j] : INT_MAX;
+            // Edge values at the partition
+            int maxLeft1 = (partition1 == 0) ? INT_MIN : nums1[partition1 - 1];
+            int minRight1 = (partition1 == n1) ? INT_MAX : nums1[partition1];
+            
+            int maxLeft2 = (partition2 == 0) ? INT_MIN : nums2[partition2 - 1];
+            int minRight2 = (partition2 == n2) ? INT_MAX : nums2[partition2];
 
-            if (Aleft <= Bright && Bleft <= Aright) {
-                if (total % 2 != 0) {
-                    return max(Aleft, Bleft);
+            // Check if partition is correct
+            if (maxLeft1 <= minRight2 && maxLeft2 <= minRight1) {
+                // If the combined length is odd
+                if ((n1 + n2) % 2 == 1) {
+                    return static_cast<double>(max(maxLeft1, maxLeft2));
                 }
-                return (max(Aleft, Bleft) + min(Aright, Bright)) / 2.0;
-            } else if (Aleft > Bright) {
-                r = i - 1;
+                // If the combined length is even
+                return (static_cast<double>(max(maxLeft1, maxLeft2)) + min(minRight1, minRight2)) / 2.0;
+            } 
+            // Adjust the partition
+            else if (maxLeft1 > minRight2) {
+                high = partition1 - 1;
             } else {
-                l = i + 1;
+                low = partition1 + 1;
             }
         }
-        return -1;
+
+        // If no solution is found (should not happen for valid input)
+        throw invalid_argument("Input arrays are not sorted.");
     }
 };
