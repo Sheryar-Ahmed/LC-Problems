@@ -1,45 +1,33 @@
 class MedianFinder {
-public:
-    // Multiset to store the numbers in sorted order
-    multiset<int> S;  
-    // Iterator to track the middle element
-    multiset<int>::iterator mid;  
+    priority_queue<int, vector<int>, less<int>> smallHeap; 
+    priority_queue<int, vector<int>, greater<int>> largeHeap;
 
-    MedianFinder() {
-    }
-    
+public:
+    MedianFinder() {}
+
     void addNum(int num) {
-        // Initalize `mid` in case of first element
-        if(S.size() == 0) {
-            S.insert(num);
-            mid = S.begin();
-        } 
-        else {
-            // Insert the number into the multiset
-            S.insert(num);  
-            
-            // Adjust the 'mid' iterator to point to the middle element
-            if(S.size() % 2 == 0) {
-                if(num < *mid) 
-                    mid--;
-            } 
-            else {
-                if(num >= *mid) 
-                    mid++;
-            }
+        smallHeap.push(num);
+        if (!largeHeap.empty() && smallHeap.top() > largeHeap.top()) {
+            largeHeap.push(smallHeap.top());
+            smallHeap.pop();
+        }
+        if (smallHeap.size() > largeHeap.size() + 1) {
+            largeHeap.push(smallHeap.top());
+            smallHeap.pop();
+        }
+        if (largeHeap.size() > smallHeap.size() + 1) {
+            smallHeap.push(largeHeap.top());
+            largeHeap.pop();
         }
     }
-    
+
     double findMedian() {
-        if(S.size() % 2 == 0) {
-            // If the size is even, return the average of the two middle elements
-            auto midP = mid; 
-            midP++;  // Move to the second middle element
-            return (double)(*mid + *midP) / 2;
-        } 
-        else {
-            // If the size is odd, return the middle element
-            return *mid;
+        if (smallHeap.size() == largeHeap.size()) {
+            return (largeHeap.top() + smallHeap.top()) / 2.0;
+        } else if (smallHeap.size() > largeHeap.size()) {
+            return smallHeap.top();
+        } else {
+            return largeHeap.top();
         }
     }
 };
