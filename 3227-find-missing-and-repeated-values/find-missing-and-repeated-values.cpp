@@ -2,32 +2,22 @@ class Solution {
 public:
     vector<int> findMissingAndRepeatedValues(vector<vector<int>>& grid) {
         int n = grid.size();
-        unordered_map<int, int> mp;
-        vector<int> ans;
+        vector<int> count(n * n + 1, 0); // Tracking occurrences of numbers from 1 to n²
+        vector<int> ans(2, -1); // [duplicate, missing]
 
-        // Initialize the map with numbers from 1 to n^2
-        for (int i = 1; i <= n * n; i++) {
-            mp[i] = 0;
-        }
-
-        // Traverse the entire grid and count occurrences of each number
+        // Traverse the grid and count occurrences
         for (int i = 0; i < n; i++) {
             for (int j = 0; j < n; j++) {
-                mp[grid[i][j]]++;  // Increase the count for each number
+                count[grid[i][j]]++;
             }
         }
 
-        // Find the duplicate and missing number
-        int duplicate = -1, missing = -1;
+        // Find the duplicate and missing numbers
         for (int i = 1; i <= n * n; i++) {
-            if (mp[i] == 2) {
-                duplicate = i;  // Number appearing twice
-            }
-            if (mp[i] == 0) {
-                missing = i;  // Number missing from the grid
-            }
+            if (count[i] == 2) ans[0] = i; // Duplicate number
+            if (count[i] == 0) ans[1] = i; // Missing number
         }
 
-        return {duplicate, missing};
+        return ans;
     }
 };
