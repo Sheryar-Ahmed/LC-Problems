@@ -22,15 +22,32 @@ public:
 class Solution {
 public:
     unordered_map<Node*, Node*> mp;
-    void DFS(Node* node, Node* clone_node) {
-        for(Node* n: node->neighbors){
-            if(mp.find(n) == mp.end()) {
-                Node* clone = new Node(n->val);
-                mp[n] = clone;
-                clone_node->neighbors.push_back(clone);
-                DFS(n, clone);
-            }else{
-                clone_node->neighbors.push_back(mp[n]);
+    // void DFS(Node* node, Node* clone_node) {
+    //     for(Node* n: node->neighbors){
+    //         if(mp.find(n) == mp.end()) {
+    //             Node* clone = new Node(n->val);
+    //             mp[n] = clone;
+    //             clone_node->neighbors.push_back(clone);
+    //             DFS(n, clone);
+    //         }else{
+    //             clone_node->neighbors.push_back(mp[n]);
+    //         }
+    //     }
+    // }
+    void BFS(queue<Node*> &q) {
+        while(!q.empty()){
+            Node* node = q.front();
+            q.pop();
+            Node* clone_node = mp[node];
+            for(Node* n: node->neighbors){
+                if(mp.find(n) == mp.end()){
+                    Node* clone = new Node(n->val);
+                    mp[n] = clone;
+                    clone_node->neighbors.push_back(clone);
+                    q.push(n);
+                }else{
+                    clone_node->neighbors.push_back(mp[n]);
+                }
             }
         }
     }
@@ -40,7 +57,10 @@ public:
         Node* clone_node = new Node(node->val);
         mp.clear();
         mp[node] = clone_node;
-        DFS(node, clone_node);
+        // DFS(node, clone_node);
+        queue<Node*> q;
+        q.push(node);
+        BFS(q);
         return clone_node;
     }
 };
