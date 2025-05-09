@@ -1,20 +1,20 @@
 class Solution {
 public:
     int countSubstrings(string s) {
-        int res = 0, n = s.length();
-        vector<vector<bool>> dp(n, vector<bool>(n, false));
-
-        for (int i = n - 1; i >= 0; i--) {
-            for (int j = i; j < n; j++) {
-                if (s[i] == s[j] && 
-                    (j - i <= 2 || dp[i + 1][j - 1])) {
-
-                    dp[i][j] = true;
-                    res++;
-                }
+            int count=0;
+            for(int i=0; i < s.size()-1; i++){
+                middleout(s, i, i, count); //odd cases
+                middleout(s, i, i+1, count); //even cases
             }
-        }
+            return count+1;
+    }
 
-        return res;
+private:
+    void middleout(const string& s, int i,int j, int & count){
+        while( i >= 0 && j <= s.size()-1 && s[i] == s[j]){
+            i--;
+            j++;
+            count++;
+        }
     }
 };
