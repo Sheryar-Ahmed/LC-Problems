@@ -1,25 +1,18 @@
 class Solution {
 public:
     int eraseOverlapIntervals(vector<vector<int>>& intervals) {
-        int minim = 0;
-        int n = intervals.size();
-        if(n == 1){
-            return 0;
-        }
-        sort(intervals.begin(), intervals.end(), [](const auto&a, const auto&b){
-            return a[0]<b[0];
+        if (intervals.empty()) return 0;
+        sort(intervals.begin(), intervals.end(), [](const auto& a, const auto& b) {
+            return a[1] < b[1];
         });
-        int i=0;
-        while(i < n-1){
-            if(intervals[i][1] > intervals[i+1][0])
-            {
-                if(intervals[i][1] < intervals[i+1][1]){
-                    intervals[i+1] = intervals[i];
-                }
-                minim++;
+        int count = 0, lastEnd = intervals[0][1];
+        for (int i = 1; i < intervals.size(); ++i) {
+            if (intervals[i][0] < lastEnd) {
+                count++;
+            } else {
+                lastEnd = intervals[i][1];
             }
-            i++;
         }
-        return minim;
+        return count;
     }
 };
