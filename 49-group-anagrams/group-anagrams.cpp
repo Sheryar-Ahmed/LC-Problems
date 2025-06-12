@@ -1,18 +1,18 @@
 class Solution {
 public:
     vector<vector<string>> groupAnagrams(vector<string>& strs) {
+        // need to create hashmap with sorting the word and link the matching one's with it
+        // just iterate over the hashmap and based on the key index which is sorted just add a vector and store the results and return them
         unordered_map<string, vector<string>> mp;
-        // store each sorted string paris in the map
-        for(auto &s: strs){
-            auto temp = s;
-            sort(temp.begin(), temp.end()); // it will sort the string and make the key
-            mp[temp].push_back(s); // aet --> {all its paris will be here}
+        for(auto str: strs){
+            string temp = str;
+            sort(temp.begin(), temp.end());
+            mp[temp].push_back(str);
         }
-        vector<vector<string>> ans;
-        // we have made paris now we will just iterate over map
-        for(auto &k: mp){
-            ans.push_back(k.second);
+        vector<vector<string>> result;
+        for(auto key: mp){
+            result.push_back(key.second);
         }
-        return ans;
+        return result;
     }
 };
