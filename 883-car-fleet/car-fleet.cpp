@@ -2,24 +2,25 @@ class Solution {
 public:
     int carFleet(int target, vector<int>& position, vector<int>& speed) {
         int n = position.size();
+        vector<pair<int, double>> cars;
 
-        vector<pair<int, double>> cars; //position and time
-        for(int i=0; i < n; i++){
-            double time = static_cast<double>(target - position[i]) / speed[i];
+        for (int i = 0; i < n; ++i) {
+            double time = (double)(target - position[i]) / speed[i];
             cars.push_back({position[i], time});
         }
-        sort(cars.begin(), cars.end());
 
-        int result = 0;
-        double maxTime = 0.0;
+        // Sort by position descending
+        sort(cars.rbegin(), cars.rend());
 
-        for(int i=n-1; i >= 0; --i){
-            double time = cars[i].second;
-            if(time > maxTime){
-                maxTime = time;
-                result++;
+        stack<double> st;
+        for (auto& car : cars) {
+            double time = car.second;
+            if (st.empty() || time > st.top()) {
+                st.push(time); // new fleet
             }
+            // else it joins the previous fleet (do nothing)
         }
-        return result;
+
+        return st.size();
     }
 };
