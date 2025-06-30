@@ -17,17 +17,18 @@ public:
 class Solution {
 public:
     Node* copyRandomList(Node* head) {
-        unordered_map<Node*, Node*> oldToCopy;
+        // we can initally make the copy with just next and store the random in the hashmap and traverse hashamp and link our copy to the random node.
+        unordered_map<Node*, Node*> oldToCopy; // original node, copy new node just with value
         Node* curr = head;
-        while(curr){
+        while(curr) {
             oldToCopy[curr] = new Node(curr->val);
             curr = curr->next;
         }
         curr = head;
-        while(curr){
+        while(curr) {
             Node* copy = oldToCopy[curr];
-            copy->next=oldToCopy[curr->next];
-            copy->random=oldToCopy[curr->random];
+            copy->next = oldToCopy[curr->next];
+            copy->random = oldToCopy[curr->random];
             curr = curr->next;
         }
         return oldToCopy[head];
