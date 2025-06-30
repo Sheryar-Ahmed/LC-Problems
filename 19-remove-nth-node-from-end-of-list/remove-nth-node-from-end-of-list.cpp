@@ -1,30 +1,31 @@
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode() : val(0), next(nullptr) {}
+ *     ListNode(int x) : val(x), next(nullptr) {}
+ *     ListNode(int x, ListNode *next) : val(x), next(next) {}
+ * };
+ */
 class Solution {
 public:
     ListNode* removeNthFromEnd(ListNode* head, int n) {
-        if (!head) return head; // If the list is empty, return
-
-        ListNode* dummy = new ListNode(0); // Dummy node to simplify edge cases
-        dummy->next = head;
-        ListNode* fast = dummy;
-        ListNode* slow = dummy;
-
-        // Move the fast pointer n+1 steps ahead
-        for (int i = 0; i <= n; i++) {
-            if (!fast) return head; // If n is greater than the length of the list
-            fast = fast->next;
+        // intuitn is to intially make the gap between the left and right pointer and move them so when the right pointer reaches end our left pointer will be at the node that's needs to be removed, inorder to be at the prev node we will do create a dummy node and makes its next to the head and initalize our left to that dummy so will be at the prev node
+        ListNode dummy(0);
+        dummy.next = head;
+        ListNode* left = &dummy;
+        ListNode* right = head;
+        while(n--) {
+            right = right->next;
+        }
+        // now just need to shift both left and right
+        while(right) {
+            left = left->next;
+            right = right->next;
         }
 
-        // Move both fast and slow pointers until fast reaches the end
-        while (fast) {
-            fast = fast->next;
-            slow = slow->next;
-        }
-
-        // Remove the nth node from the end
-        ListNode* toDelete = slow->next;
-        slow->next = slow->next->next;
-
-        delete toDelete; // Free memory for the removed node
-        return dummy->next; // Return the updated list
+        left->next = left->next->next;
+        return dummy.next;
     }
 };
