@@ -10,20 +10,17 @@
  * };
  */
 class Solution {
-private: 
-    int maxDepth(TreeNode* root, int &res) {
-        if(root == nullptr){
-            return 0;
-        }
-        int left = maxDepth(root->left, res);
-        int right = maxDepth(root->right, res);
-        res = max(res, left+right);
-        return 1 + max(left, right);
-    }
 public:
     int diameterOfBinaryTree(TreeNode* root) {
-        int res = 0;
-        maxDepth(root, res);
-        return res;
+        int diameter = 0;
+        cal(root, diameter);
+        return diameter;
+    }
+    int cal(TreeNode* root, int& diameter){
+        if(!root) return 0;
+        int left = cal(root->left, diameter);
+        int right = cal(root->right, diameter);
+        diameter = max(diameter, left+right); // that's the nodes point
+        return 1+max(left, right); // height calculation
     }
 };
