@@ -1,21 +1,20 @@
 class Solution {
 public:
-    bool ans;
-    int checkBalance(TreeNode* root){
-        if(!root)
-            return 0;
-        if(!ans) // if Answer is already False then return it.
-            return 0;
-        int leftSubTree = checkBalance(root->left);
-        int rightSubTree = checkBalance(root->right);
-        if(abs(leftSubTree-rightSubTree) > 1){
-            ans = false;
-        }
-        return 1 + max(leftSubTree, rightSubTree);
+    bool isBalanced(TreeNode* root) {
+        return dfs(root) != -1;
     }
-    bool isBalanced(TreeNode* root){
-        ans = true;
-        int temp = checkBalance(root);
-        return ans;
+
+    int dfs(TreeNode* node) {
+        if (!node) return 0;
+
+        int left = dfs(node->left);
+        if (left == -1) return -1;
+
+        int right = dfs(node->right);
+        if (right == -1) return -1;
+
+        if (abs(left - right) > 1) return -1;
+
+        return 1 + max(left, right);
     }
 };
