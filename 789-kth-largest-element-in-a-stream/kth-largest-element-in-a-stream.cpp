@@ -1,3 +1,7 @@
+#include <queue>
+#include <vector>
+using namespace std;
+
 class KthLargest {
 private:
     priority_queue<int, vector<int>, greater<int>> minHeap;
@@ -9,16 +13,16 @@ public:
         for (int num : nums) {
             minHeap.push(num);
             if (minHeap.size() > k) {
-                minHeap.pop();
+                minHeap.pop();  // remove smallest
             }
         }
     }
-
+    
     int add(int val) {
         minHeap.push(val);
         if (minHeap.size() > k) {
-            minHeap.pop();
+            minHeap.pop();  // maintain size k
         }
-        return minHeap.top();
+        return minHeap.top();  // Kth largest
     }
 };
