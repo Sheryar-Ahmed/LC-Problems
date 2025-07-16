@@ -1,32 +1,26 @@
 class Solution {
 public:
     vector<vector<int>> kClosest(vector<vector<int>>& points, int k) {
-        // max-heap based on distance
-        auto dist = [](vector<int>& p) {
-            return p[0] * p[0] + p[1] * p[1]; // squared Euclidean distance
-        };
-
-        // pair: {distance, point}
-        auto cmp = [](pair<int, vector<int>>& a, pair<int, vector<int>>& b) {
-            return a.first < b.first;  // max-heap (farthest on top)
-        };
-
-        priority_queue<pair<int, vector<int>>, vector<pair<int, vector<int>>>, decltype(cmp)> maxHeap(cmp);
-
-        for (auto& point : points) {
-            int d = dist(point);
-            maxHeap.push({d, point});
+        // Max heap with custom comparator (stores {distance, x, y})
+        priority_queue<vector<int>> maxHeap;
+        
+        for (auto& p : points) {
+            int x = p[0], y = p[1];
+            maxHeap.push({x * x + y * y, x, y});
             if (maxHeap.size() > k) {
-                maxHeap.pop(); // remove the farthest
+                maxHeap.pop();  // Remove farthest point
             }
         }
+        
+        vector<vector<int>> result;
+        result.reserve(k);  // Reserve space for optimization
 
-        vector<vector<int>> ans;
         while (!maxHeap.empty()) {
-            ans.push_back(maxHeap.top().second);
+            const auto& top = maxHeap.top();  // Avoid unnecessary copying
+            result.push_back({top[1], top[2]});
             maxHeap.pop();
         }
-
-        return ans;
+        
+        return result;
     }
 };
