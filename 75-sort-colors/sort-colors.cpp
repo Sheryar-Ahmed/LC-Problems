@@ -1,17 +1,23 @@
 class Solution {
 public:
     void sortColors(vector<int>& nums) {
-        int count[3] = {0}; // count[0] = # of 0s, count[1] = # of 1s, count[2] = # of 2s
-
-        for (int num : nums) {
-            count[num]++;
+        int z = 0;
+        int o = 0;
+        int t = 0;
+        for(auto &x: nums){
+            if( x == 0) z++;
+            if( x == 1) o++;
+            if(x == 2) t++;
         }
-
-        int index = 0;
-        for (int color = 0; color < 3; ++color) {
-            for (int i = 0; i < count[color]; ++i) {
-                nums[index++] = color;
-            }
+        int p = 0;
+        while(z--){
+            nums[p++] = 0;
+        }
+        while(o--){
+            nums[p++] = 1;
+        }
+        while(t--){
+            nums[p++] = 2;
         }
     }
 };
