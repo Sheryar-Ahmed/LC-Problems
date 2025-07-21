@@ -1,20 +1,18 @@
 class Solution {
 public:
     vector<int> topKFrequent(vector<int>& nums, int k) {
+        unordered_map<int, int> mp;
+        for(auto &x: nums){
+            mp[x]++;
+        }
+        priority_queue<pair<int, int>> pq;
+        for(auto it: mp){
+            pq.push({it.second, it.first});
+        }
         vector<int> ans;
-        unordered_map<int, int> freq;
-        for(const auto &x: nums){
-            freq[x]++; // count each number freq
-        }
-        // store each number with their freq in maxHeap 
-        priority_queue<pair<int, int>> maxH;
-        for(auto k: freq){
-            maxH.push({k.second, k.first}); // now the most frequest element is at top 
-        }
-        // we need to pop those elements equal to K
-        for (int i = 0; i < k; i++) {
-            ans.push_back(maxH.top().second);
-            maxH.pop();
+        while(k-- && !pq.empty()){
+            ans.push_back(pq.top().second);
+            pq.pop();
         }
         return ans;
     }
