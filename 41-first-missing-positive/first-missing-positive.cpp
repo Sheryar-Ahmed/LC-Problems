@@ -3,19 +3,26 @@ public:
     int firstMissingPositive(vector<int>& nums) {
         int n = nums.size();
         vector<bool> seen(n, false);
-        
-        for (int num : nums) {
-            if (num > 0 && num <= n) {
-                seen[num - 1] = true;
+        for(auto &x: nums){
+            if(x > 0 && x <= n){
+                seen[x-1] = true;
             }
         }
-        
-        for (int i = 0; i < n; i++) {
-            if (!seen[i]) {
-                return i + 1;
-            }
+        for(int i=0;i  < seen.size(); i++){
+            if(!seen[i]) return i+1;
         }
-        
-        return n + 1;
+        return n+1;
+        // int missing = 1;
+        // while(true){
+        //     bool flag = true;
+        //     for(auto x: nums){
+        //         if(missing == x){
+        //             flag = false;
+        //         }
+        //     }
+        //     if(flag) return missing;
+        //     missing++;
+        // }
+        // return missing;
     }
 };
