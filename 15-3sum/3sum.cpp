@@ -1,35 +1,32 @@
 class Solution {
 public:
-vector<vector<int>> threeSum(vector<int>& nums) {
-    vector<vector<int>> res;
-    sort(nums.begin(), nums.end());
-    int n = nums.size();
-
-    for (int i = 0; i < n - 2; ++i) {
-        if (i > 0 && nums[i] == nums[i - 1]) continue; // skip duplicates
-
-        int left = i + 1, right = n - 1;
-
-        while (left < right) {
-            int sum = nums[i] + nums[left] + nums[right];
-
-            if (sum < 0) {
-                left++;
-            } else if (sum > 0) {
-                right--;
-            } else {
-                res.push_back({nums[i], nums[left], nums[right]});
-
-                while (left < right && nums[left] == nums[left + 1]) left++; // skip dups
-                while (left < right && nums[right] == nums[right - 1]) right--; // skip dups
-
-                left++;
-                right--;
+    vector<vector<int>> threeSum(vector<int>& nums) {
+        sort(nums.begin(), nums.end());
+        vector<vector<int>> ans;
+        int target = 0;
+        for (int i = 0; i < nums.size() - 2;
+             i++) { // fix one and find two elements
+            if (i > 0 && nums[i] == nums[i - 1])
+                continue; // skip duplicates.
+            int L = i + 1;
+            int R = nums.size() - 1;
+            while (L < R) {
+                int sum = nums[L] + nums[R] + nums[i];
+                if (sum == target) {
+                    ans.push_back({nums[i], nums[L], nums[R]});
+                    // after pushing check for next elments are duplicates skip
+                    // untill
+                    while (L < R && nums[L] == nums[L + 1]) L++;
+                    while (L < R && nums[R] == nums[R - 1]) R--;
+                    L++;
+                    R--;
+                } else if (sum < target) {
+                    L++;
+                } else {
+                    R--;
+                };
             }
         }
+        return ans;
     }
-
-    return res;
-}
-
 };
