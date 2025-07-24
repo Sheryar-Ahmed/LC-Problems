@@ -1,11 +1,24 @@
 class Solution {
 public:
+    void reverse(vector<int>& nums, int left, int right) {
+        while (left < right) {
+            swap(nums[left], nums[right]);
+            left++;
+            right--;
+        }
+    }
+
     void rotate(vector<int>& nums, int k) {
         int n = nums.size();
-        k %= n; // normalize k
+        k %= n;  // normalize k
 
-        reverse(nums.begin(), nums.end());             // Step 1
-        reverse(nums.begin(), nums.begin() + k);       // Step 2
-        reverse(nums.begin() + k, nums.end());         // Step 3
+        // Step 1: reverse the entire array
+        reverse(nums, 0, n - 1);
+
+        // Step 2: reverse the first k elements
+        reverse(nums, 0, k - 1);
+
+        // Step 3: reverse the remaining elements
+        reverse(nums, k, n - 1);
     }
 };
