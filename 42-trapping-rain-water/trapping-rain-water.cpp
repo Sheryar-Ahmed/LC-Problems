@@ -1,26 +1,30 @@
 class Solution {
 public:
     int trap(vector<int>& height) {
-        stack<int> st; // stack to store indices
-        int trapped = 0;
-        int n = height.size();
+        int left = 0, right = height.size() - 1;
+        int leftMax = 0, rightMax = 0;
+        int water = 0;
 
-        for (int i = 0; i < n; i++) {
-            // While the current height is greater than the top of stack
-            while (!st.empty() && height[i] > height[st.top()]) {
-                int bottom = st.top();
-                st.pop();
+        while (left < right) {
+            if (height[left] < height[right]) {
+                // Left is the shorter boundary
+                if (height[left] >= leftMax)
+                    leftMax = height[left];
+                else
+                    water += leftMax - height[left]; // water trapped above this bar
 
-                if (st.empty()) break; // No left boundary
+                left++;
+            } else {
+                // Right is the shorter boundary
+                if (height[right] >= rightMax)
+                    rightMax = height[right];
+                else
+                    water += rightMax - height[right]; // water trapped above this bar
 
-                int left = st.top(); // Left boundary
-                int width = i - left - 1;
-                int minHeight = min(height[left], height[i]) - height[bottom];
-                trapped += width * minHeight;
+                right--;
             }
-            st.push(i); // always push current index
         }
 
-        return trapped;
+        return water;
     }
 };
