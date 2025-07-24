@@ -1,16 +1,16 @@
 class Solution {
 public:
     int maxSubArray(vector<int>& nums) {
-        // greedy approach here is whenever our sum hits negative reset it to 0
-        int sum = 0;
-        int MaxSum = nums[0];
-        for(int i=0; i <= nums.size()-1; i++){
-            if(sum < 0){
-                sum = 0;
+        int largestSum = nums[0];
+        int currSum = 0;
+        for(auto &x: nums){
+            if(currSum < 0){
+                currSum = 0;
             }
-            sum+=nums[i];
-            MaxSum = max(MaxSum, sum);
+            currSum+=x;
+            largestSum = max(currSum, largestSum);
         }
-        return MaxSum;
+
+        return largestSum;
     }
 };
