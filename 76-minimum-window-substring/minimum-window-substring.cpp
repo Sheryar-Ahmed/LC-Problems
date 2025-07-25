@@ -1,48 +1,43 @@
 class Solution {
 public:
     string minWindow(string s, string t) {
-        if (s.size() < t.size()) return "";
-
-        // Frequency map for characters in t
+        if (s.size() < t.size())
+            return "";
         unordered_map<char, int> required;
-        for (char c : t) {
-            required[c]++;
-        }
+        for (auto& x : t) {
+            required[x]++;
+        };
 
-        // Frequency map for the current window
         unordered_map<char, int> window;
-        int have = 0, need = required.size(); // `have` tracks how many characters satisfy the requirement
-        int L = 0, minLen = INT_MAX;
-        int minL = 0, minR = 0;
+        int have = 0, need = required.size();
+        int L = 0;
+        // these are for substring
+        int minLen = INT_MAX;
+        int minL = 0;
+        int minR = 0;
 
         for (int R = 0; R < s.size(); R++) {
             char c = s[R];
             window[c]++;
-
-            // If this character satisfies the requirement
-            if (required.find(c) != required.end() && window[c] == required[c]) {
-                have++;
+            if (required.find(c) != required.end() &&
+                required[c] == window[c]) {
+                have++; // aak element ki need puri hogi
             }
-
-            // Shrink the window from the left as much as possible
+            // agar have or need equal hogy, we can shrink
             while (have == need) {
-                // Update the result if this window is smaller
-                if (R - L + 1 < minLen) {
+                char l = s[L];
+                if (R - L + 1 < minLen) { // to get the min length
                     minLen = R - L + 1;
                     minL = L;
                     minR = R;
                 }
-
-                // Remove the leftmost character from the window
-                char leftChar = s[L];
-                window[leftChar]--;
-                if (required.find(leftChar) != required.end() && window[leftChar] < required[leftChar]) {
+                window[l]--;
+                if (window.find(l) != window.end() && window[l] < required[l]) {
                     have--;
                 }
                 L++;
             }
         }
-
         return minLen == INT_MAX ? "" : s.substr(minL, minLen);
     }
 };
