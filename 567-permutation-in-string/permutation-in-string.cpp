@@ -1,25 +1,31 @@
 class Solution {
 public:
     bool checkInclusion(string s1, string s2) {
-        if (s1.size() > s2.size()) return false;
+        int len1 = s1.size();
+        int len2 = s2.size();
+        if (len2 < len1) return false;
 
-        vector<int> s1Count(26, 0), s2Count(26, 0);
-        
-        // Count characters in s1 and the first window in s2
-        for (int i = 0; i < s1.size(); ++i) {
-            s1Count[s1[i] - 'a']++;
-            s2Count[s2[i] - 'a']++;
+        vector<int> freqs1(26, 0);
+        vector<int> windowFreq(26, 0);
+
+        // Count frequencies of characters in s1 and first window of s2
+        for (int i = 0; i < len1; i++) {
+            freqs1[s1[i] - 'a']++;
+            windowFreq[s2[i] - 'a']++;
         }
 
-        // If the first window matches, return true
-        if (s1Count == s2Count) return true;
+        // Check the first window
+        if (freqs1 == windowFreq) return true;
 
-        // Slide the window over s2
-        for (int i = s1.size(); i < s2.size(); ++i) {
-            s2Count[s2[i] - 'a']++;                     // add new character
-            s2Count[s2[i - s1.size()] - 'a']--;         // remove old character
-            
-            if (s1Count == s2Count) return true;
+        // Slide the window
+        for (int i = len1; i < len2; i++) {
+            // Add new character to the window
+            windowFreq[s2[i] - 'a']++;
+            // Remove the character that is left behind
+            windowFreq[s2[i - len1] - 'a']--;
+
+            // Check if the current window matches s1's frequencies
+            if (freqs1 == windowFreq) return true;
         }
 
         return false;
