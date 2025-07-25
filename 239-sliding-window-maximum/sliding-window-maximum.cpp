@@ -1,36 +1,28 @@
 class Solution {
 public:
     vector<int> maxSlidingWindow(vector<int>& nums, int k) {
+        deque<int> dq;  // will store **indices** of useful elements
         vector<int> ans;
-        int L = 0;
-        int maxIndex = 0;
 
-        // Find initial max index
-        for (int i = 0; i < k; i++) {
-            if (nums[i] >= nums[maxIndex]) {
-                maxIndex = i;
-            }
-        }
-        ans.push_back(nums[maxIndex]);
+        for (int i = 0; i < nums.size(); i++) {
 
-        for (int R = k; R < nums.size(); R++) {
-            L++; // move window
-
-            // Check if maxIndex is out of window
-            if (maxIndex < L) {
-                // Recompute max in window
-                maxIndex = L;
-                for (int i = L; i <= R; i++) {
-                    if (nums[i] >= nums[maxIndex]) {
-                        maxIndex = i;
-                    }
-                }
-            } else if (nums[R] >= nums[maxIndex]) {
-                // New max enters window
-                maxIndex = R;
+            // Remove indices out of the current window from the front
+            if (!dq.empty() && dq.front() <= i - k) {
+                dq.pop_front();
             }
 
-            ans.push_back(nums[maxIndex]);
+            // Remove elements smaller than the current from the back
+            while (!dq.empty() && nums[dq.back()] < nums[i]) {
+                dq.pop_back();
+            }
+
+            // Add current index
+            dq.push_back(i);
+
+            // Window of size k is formed, record the max
+            if (i >= k - 1) {
+                ans.push_back(nums[dq.front()]);
+            }
         }
 
         return ans;
