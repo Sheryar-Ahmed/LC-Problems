@@ -2,21 +2,21 @@ class Solution {
 public:
     vector<string> generateParenthesis(int n) {
         vector<string> ans;
-        backtrack(0, 0, n, "", ans);
-        return ans;    
+        backtrack(ans, n, 0,0, "");
+        return ans;
     }
-    
-    void backtrack(int openN, int closeN, int& n, string str, vector<string>& ans){
-        if(openN == n && closeN == n){
-            ans.push_back(str);
+    void backtrack(vector<string>& ans, int n, int closeN, int openN, string curr){
+        if(curr.length() == 2*n){
+            ans.push_back(curr);
             return;
         }
+        
+        // case 1 opening paranthesis is smaller than closing
         if(openN < n){
-            backtrack(openN+1, closeN, n, str+'(', ans);
+            backtrack(ans, n, closeN, openN+1, curr+'(');
         }
         if(closeN < openN){
-            backtrack(openN, closeN+1, n, str+')', ans);
+            backtrack(ans, n, closeN+1, openN, curr+')');
         }
     }
-
 };
