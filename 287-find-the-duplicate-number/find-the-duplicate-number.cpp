@@ -1,23 +1,18 @@
 class Solution {
 public:
     int findDuplicate(vector<int>& nums) {
-        int slow=0, fast=0;
-        // find the first intersection
-        while(true){
-            slow = nums[slow]; //  move slowly
-            fast = nums[nums[fast]]; // move fastly
-            if(slow == fast){ // found that index they intersected
-                break;
-            }
+        int slow = 0;
+        int fast = 0;
+        do{
+            slow = nums[slow];
+            fast = nums[nums[fast]]; // why now just fast because if i do both has initial 0 will be equal
+        }while(slow != fast);
+        // found intersection
+        int slow2 = 0;
+        while(slow2 != slow){
+            slow = nums[slow];
+            slow2 = nums[slow2];
         }
-        // find the second interaction by slow 2 pointer
-        int slow2 = 0; // starting from the first index
-        while(true){
-            slow = nums[slow]; //
-            slow2 = nums[slow2]; // the distance between them is gonna always be 1
-            if(slow == slow2){
-                return slow;
-            }
-        }
+        return slow;
     }
 };
