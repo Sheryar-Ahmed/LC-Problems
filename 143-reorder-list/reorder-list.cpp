@@ -11,40 +11,38 @@
 class Solution {
 public:
     void reorderList(ListNode* head) {
-        if (!head || !head->next) return; // Edge case: if the list is empty or has only one node
-        
-        // Step 1: Find the middle of the linked list
+        if (!head || !head->next)
+            return;
+        // find the middle
         ListNode* slow = head;
         ListNode* fast = head;
-        
-        while (fast != nullptr && fast->next != nullptr) {
+        while (fast && fast->next) {
             slow = slow->next;
             fast = fast->next->next;
         }
-
-        // Step 2: Reverse the second half of the list
-        ListNode* prev = nullptr;
-        ListNode* curr = slow->next;
-        slow->next = nullptr; // Split the list into two halves
-
-        while (curr != nullptr) {
+        // now my slow pointer is at the middle
+        ListNode* prev = NULL;
+        ListNode* curr = slow->next; // reverse from the slow upto the end;
+        while (curr) {
             ListNode* next = curr->next;
             curr->next = prev;
             prev = curr;
             curr = next;
         }
-        
-        // Step 3: Merge the two halves
+        // now my curr is successfully reversed
+        slow->next = nullptr; // now our head is just first half;
+        // merge
         ListNode* first = head;
-        ListNode* second = prev;
-        
-        while (second != nullptr) {
+        ListNode* second = prev; // prev our reversed half
+        while (second) {
+            // get the both next
             ListNode* temp1 = first->next;
             ListNode* temp2 = second->next;
-            
+            // first->next will be the second element
             first->next = second;
+            // second->next will be the first->next
             second->next = temp1;
-            
+            // shift the frist and second
             first = temp1;
             second = temp2;
         }
