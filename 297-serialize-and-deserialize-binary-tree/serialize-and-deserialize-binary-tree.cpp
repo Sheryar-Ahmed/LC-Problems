@@ -1,43 +1,36 @@
-/**
- * Definition for a binary tree node.
- * struct TreeNode {
- *     int val;
- *     TreeNode *left;
- *     TreeNode *right;
- *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
- * };
- */
 class Codec {
 public:
-
     // Encodes a tree to a single string.
     string serialize(TreeNode* root) {
-        if(root == NULL){
-            return "N";
-        }
-        return to_string(root->val)+","+serialize(root->left)+","+serialize(root->right);
+        if (!root) return "null,";
+        return to_string(root->val) + "," +
+               serialize(root->left) +
+               serialize(root->right);
+    }
+
+    // Helper function for deserialization
+    TreeNode* buildTree(queue<string>& nodes) {
+        string val = nodes.front();
+        nodes.pop();
+
+        if (val == "null") return nullptr;
+
+        TreeNode* node = new TreeNode(stoi(val));
+        node->left = buildTree(nodes);
+        node->right = buildTree(nodes);
+        return node;
     }
 
     // Decodes your encoded data to tree.
     TreeNode* deserialize(string data) {
-        istringstream iss(data);
-        return deserializeHelper(iss);
-    }
-private:
-    TreeNode* deserializeHelper(istringstream &iss){
-        string token;
-        getline(iss, token, ',');
-        if(token == "N"){
-            return nullptr;
+        stringstream ss(data);
+        string item;
+        queue<string> nodes;
+
+        while (getline(ss, item, ',')) {
+            nodes.push(item);
         }
 
-        TreeNode* root = new TreeNode(stoi(token));
-        root->left = deserializeHelper(iss);
-        root->right = deserializeHelper(iss);
-        return root;
+        return buildTree(nodes);
     }
 };
-
-// Your Codec object will be instantiated and called as such:
-// Codec ser, deser;
-// TreeNode* ans = deser.deserialize(ser.serialize(root));
