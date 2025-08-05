@@ -1,40 +1,29 @@
-#include <vector>
-#include <queue>
-using namespace std;
-
 class Solution {
 public:
     vector<int> rightSideView(TreeNode* root) {
-        vector<int> ans; // To store the rightmost nodes at each level
-        if (!root) {
-            return ans; // Return empty result if the tree is empty
-        }
+        vector<int> view;
+        if (!root) return view;
 
-        queue<TreeNode*> q; // Queue for level-order traversal
+        queue<TreeNode*> q;
         q.push(root);
 
         while (!q.empty()) {
-            int level_size = q.size(); // Number of nodes at the current level
+            int levelSize = q.size();  // Nodes in current level
 
-            for (int i = 0; i < level_size; i++) {
-                TreeNode* front = q.front();
+            for (int i = 0; i < levelSize; i++) {
+                TreeNode* node = q.front();
                 q.pop();
 
-                // If this is the last node in the current level, add it to the result
-                if (i == level_size - 1) {
-                    ans.push_back(front->val);
+                // If it's the last node in this level → visible from right
+                if (i == levelSize - 1) {
+                    view.push_back(node->val);
                 }
 
-                // Add left and right children to the queue
-                if (front->left) {
-                    q.push(front->left);
-                }
-                if (front->right) {
-                    q.push(front->right);
-                }
+                if (node->left) q.push(node->left);
+                if (node->right) q.push(node->right);
             }
         }
 
-        return ans;
+        return view;
     }
 };
