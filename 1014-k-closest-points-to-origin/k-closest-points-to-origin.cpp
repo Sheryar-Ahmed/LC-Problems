@@ -13,7 +13,7 @@ public:
         }
         
         vector<vector<int>> result;
-        result.reserve(k);  // Reserve space for optimization
+        // result.reserve(k);  // Reserve space for optimization
 
         while (!maxHeap.empty()) {
             const auto& top = maxHeap.top();  // Avoid unnecessary copying
