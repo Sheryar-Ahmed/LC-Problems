@@ -2,7 +2,7 @@ class Solution {
 public:
     vector<string> res;
     vector<string> digitToChar = {"", "", "abc", "def", "ghi", "jkl",
-                                  "mno", "qprs", "tuv", "wxyz"};
+                                  "mno", "pqrs", "tuv", "wxyz"};
 
     vector<string> letterCombinations(string digits) {
         if (digits.empty()) return res;
