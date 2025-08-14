@@ -1,17 +1,18 @@
 class TrieNode {
     public:
-        bool isWord;
-        TrieNode* childNode[26];
-        TrieNode() {
-            for(int i=0; i < 26; i++) {
-                childNode[i] = NULL;
-            }
-            isWord = false;
+    bool isWord;
+    TrieNode* childNode[26];
+    TrieNode() {
+        for(int i=0; i < 26; i++){
+            childNode[i] = nullptr;
         }
+        isWord = false;
+    }
 };
+
 class Trie {
 private:
-    TrieNode* root;
+TrieNode* root;
 public:
     Trie() {
         root = new TrieNode();
@@ -19,12 +20,11 @@ public:
     
     void insert(string word) {
         TrieNode* crawler = root;
-        for(auto ch: word){
-            int idx = ch-'a'; // to get the index
+        for(auto s: word){
+            int idx = s-'a';
             if(crawler->childNode[idx] == NULL){
                 crawler->childNode[idx] = new TrieNode();
             }
-            // move the crawler to the next
             crawler = crawler->childNode[idx];
         }
         crawler->isWord = true;
@@ -32,26 +32,23 @@ public:
     
     bool search(string word) {
         TrieNode* crawler = root;
-        for(auto ch: word){
-            int idx = ch-'a'; // to get the index
-            if(crawler->childNode[idx] == NULL){
+        for(auto s: word){
+            int idx = s-'a';
+            if(crawler->childNode[idx] == nullptr){
                 return false;
             }
-            // move the crawler to the next
             crawler = crawler->childNode[idx];
         }
         return crawler->isWord;
     }
     
     bool startsWith(string prefix) {
-        
         TrieNode* crawler = root;
-        for(auto ch: prefix){
-            int idx = ch-'a'; // to get the index
+        for(auto p: prefix){
+            int idx = p-'a';
             if(crawler->childNode[idx] == NULL){
                 return false;
             }
-            // move the crawler to the next
             crawler = crawler->childNode[idx];
         }
         return true;
