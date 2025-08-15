@@ -1,27 +1,31 @@
 class Solution {
-public:
-    void DFS(vector<vector<int>>& grid, int i, int j, int& count) {
-        if(i < 0 || j < 0 || i >= grid.size() || j >= grid[0].size() || grid[i][j] == 0) {
-            return;
+private:
+    int dfs(vector<vector<int>>& grid, int i, int j) {
+        if (i < 0 || i >= grid.size() || j < 0 || j >= grid[0].size() || grid[i][j] == 0) {
+            return 0;
         }
-        grid[i][j] = 0;
-        count++;
-        DFS(grid, i-1, j, count);
-        DFS(grid, i+1, j, count);
-        DFS(grid, i, j-1, count);
-        DFS(grid, i, j+1, count);
+
+        grid[i][j] = 0; // mark visited
+        int area = 1;
+
+        area += dfs(grid, i + 1, j);
+        area += dfs(grid, i - 1, j);
+        area += dfs(grid, i, j + 1);
+        area += dfs(grid, i, j - 1);
+
+        return area;
     }
+
+public:
     int maxAreaOfIsland(vector<vector<int>>& grid) {
-        int result = 0;
-        for(int i=0; i < grid.size(); i++){
-            for(int j=0; j < grid[0].size(); j++){
-                if(grid[i][j] == 1) {
-                    int count = 0;
-                    DFS(grid, i, j, count);
-                    result = max(result, count);
+        int maxArea = 0;
+        for (int i = 0; i < grid.size(); i++) {
+            for (int j = 0; j < grid[0].size(); j++) {
+                if (grid[i][j] == 1) {
+                    maxArea = max(maxArea, dfs(grid, i, j));
                 }
             }
         }
-        return result;
+        return maxArea;
     }
 };
