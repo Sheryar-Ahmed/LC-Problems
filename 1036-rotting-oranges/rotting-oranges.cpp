@@ -1,48 +1,53 @@
 class Solution {
 public:
     int orangesRotting(vector<vector<int>>& grid) {
-        int n = grid.size(); // Number of rows
-        int m = grid[0].size(); // Number of columns
-        
+        int rows = grid.size();
+        int cols = grid[0].size();
         queue<pair<int, int>> q;
-        int freshCount = 0; // Count of fresh oranges
-        
-        // Initialize the queue and count the fresh oranges
-        for(int i = 0; i < n; i++) {
-            for(int j = 0; j < m; j++) {
-                if(grid[i][j] == 2) {
+        int fresh = 0;
+
+        // Step 1: Push all rotten oranges, count fresh
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < cols; j++) {
+                if (grid[i][j] == 2) {
                     q.push({i, j});
                 } else if (grid[i][j] == 1) {
-                    freshCount++;
+                    fresh++;
                 }
             }
         }
-        
-        int minutes = 0;
-        vector<pair<int, int>> directions = {{-1, 0}, {0, 1}, {1, 0}, {0, -1}};
-        
-        // Perform BFS
-        while(!q.empty() && freshCount > 0) {
-            int size = q.size();
-            for(int i = 0; i < size; i++) {
-                auto current = q.front();
-                q.pop();
-                
-                for(auto dir : directions) {
-                    int newRow = current.first + dir.first;
-                    int newCol = current.second + dir.second;
-                    
-                    if(newRow >= 0 && newRow < n && newCol >= 0 && newCol < m && 
-                        grid[newRow][newCol] == 1) {
-                        grid[newRow][newCol] = 2;
-                        freshCount--;
-                        q.push({newRow, newCol});
-                    }
+
+        // Edge case: no fresh at all
+        if (fresh == 0) return 0;
+
+        vector<vector<int>> dirs = {{-1, 0}, {1, 0}, {0, -1}, {0, 1}};
+        int time = 0;
+
+        // Step 2: Multi-source BFS
+        while (!q.empty()) {
+            int sz = q.size();
+            bool rotted = false;
+
+            for (int i = 0; i < sz; i++) {
+                auto [row, col] = q.front(); q.pop();
+
+                for (auto &d : dirs) {
+                    int r = row + d[0];
+                    int c = col + d[1];
+
+                    if (r < 0 || r >= rows || c < 0 || c >= cols || grid[r][c] != 1) 
+                        continue;
+
+                    grid[r][c] = 2;  // now rotten
+                    fresh--;
+                    rotted = true;
+                    q.push({r, c});
                 }
             }
-            if(!q.empty()) minutes++;
+
+            if (rotted) time++; // only increment if something rotted this round
         }
-        
-        return freshCount == 0 ? minutes : -1;
+
+        return fresh == 0 ? time : -1;
     }
 };
