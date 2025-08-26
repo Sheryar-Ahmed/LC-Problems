@@ -1,21 +1,17 @@
 class Solution {
 public:
-   int coinChange(vector<int>& coins, int amount) {
-        vector<int> dp(amount + 1, INT_MAX);
-        
-        dp[0] = 0;
+    int coinChange(vector<int>& coins, int amount) {
+        vector<int> dp(amount + 1, 1e9); // large number instead of infinity
+        dp[0] = 0; // base case
 
-        // Iterate through each coin
-        for (int coin : coins) {
-            for (int i = coin; i <= amount; ++i) {
-                // If using this coin reduces the amount, update the minimum number of coins needed
-                if (dp[i - coin] != INT_MAX) {
-                    dp[i] = min(dp[i], 1 + dp[i - coin]);
+        for (int i = 1; i <= amount; i++) {
+            for (int c : coins) {
+                if (i - c >= 0) {
+                    dp[i] = min(dp[i], dp[i - c] + 1);
                 }
             }
         }
 
-        return (dp[amount] == INT_MAX) ? -1 : dp[amount];
+        return dp[amount] == 1e9 ? -1 : dp[amount];
     }
-
 };
