@@ -1,27 +1,20 @@
 class Solution {
-private:
-    unordered_map<int, int> memo;
-
 public:
     int combinationSum4(vector<int>& nums, int target) {
-        sort(nums.begin(), nums.end());
-        memo[0] = 1;
-        return dfs(nums, target);
-    }
+        unordered_map<int, long long> dp;
+        dp[0] = 1;
 
-    int dfs(vector<int>& nums, int total) {
-        if (memo.count(total)) {
-            return memo[total];
-        }
-
-        int res = 0;
-        for (int num : nums) {
-            if (total < num) {
-                break;
+        for (int total = 1; total <= target; total++) {
+            dp[total] = 0;
+            for (int num : nums) {
+                if (total >= num) {
+                    dp[total] += dp[total - num];
+                }
             }
-            res += dfs(nums, total - num);
+            if (dp[total] > INT_MAX) {
+                dp[total] = 0;
+            }
         }
-        memo[total] = res;
-        return res;
+        return dp[target];
     }
 };
