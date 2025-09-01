@@ -1,14 +1,24 @@
 class Solution {
 public:
-    bool canJump(vector<int>& nums) {
-        int goal = nums.size() - 1;
+enum State { GOOD, BAD, UNKNOWN };
 
-        for (int i = nums.size() - 2; i >= 0; i--) {
-            if (i + nums[i] >= goal) {
-                goal = i;
-            }
+bool canJumpFrom(int pos, vector<int>& nums, vector<State>& memo) {
+    if (memo[pos] != UNKNOWN) return memo[pos] == GOOD;
+
+    int furthest = min((int)nums.size() - 1, pos + nums[pos]);
+    for (int next = pos + 1; next <= furthest; next++) {
+        if (canJumpFrom(next, nums, memo)) {
+            memo[pos] = GOOD;
+            return true;
         }
-
-        return goal == 0;
     }
+    memo[pos] = BAD;
+    return false;
+}
+
+bool canJump(vector<int>& nums) {
+    vector<State> memo(nums.size(), UNKNOWN);
+    memo[nums.size() - 1] = GOOD;
+    return canJumpFrom(0, nums, memo);
+}
 };
