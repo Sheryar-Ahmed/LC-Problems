@@ -1,9 +1,7 @@
 class Solution {
 public:
     bool isValidSudoku(vector<vector<char>>& board) {
-        unordered_set<string> row;
-        unordered_set<string> col;
-        unordered_set<string> cube;
+        unordered_set<string> hash;
         int rows = board.size();
         int cols = board[0].size();
         for (int i = 0; i < rows; i++) {
@@ -17,18 +15,18 @@ public:
                     string cubeCheck = to_string(i / 3) + to_string(j / 3) +
                                        "cube check in" + to_string(n);
                     // row, col and cube checks;
-                    if (row.find(rowCheck) != row.end()) {
+                    if (hash.find(rowCheck) != hash.end()) {
                         return false;
                     }
-                    if (col.find(colCheck) != col.end()) {
+                    if (hash.find(colCheck) != hash.end()) {
                         return false;
                     }
-                    if (cube.find(cubeCheck) != cube.end()) {
+                    if (hash.find(cubeCheck) != hash.end()) {
                         return false;
                     }
-                    row.insert(rowCheck);
-                    col.insert(colCheck);
-                    cube.insert(cubeCheck);
+                    hash.insert(rowCheck);
+                    hash.insert(colCheck);
+                    hash.insert(cubeCheck);
                 }
             }
         }
