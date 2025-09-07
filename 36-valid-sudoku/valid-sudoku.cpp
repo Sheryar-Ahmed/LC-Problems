@@ -1,23 +1,35 @@
 class Solution {
 public:
     bool isValidSudoku(vector<vector<char>>& board) {
-        unordered_set<string> hash; // hash to store info
-
-        for(int i=0; i < 9; i++){
-            for(int j=0; j < 9; j++){
-                char number = board[i][j];
-            if(board[i][j] != '.'){
-                string rowCheck = to_string(number) + "in row" + to_string(i);
-                string colCheck = to_string(number) + "in col" + to_string(j);
-                string cubeCheck = to_string(number) + "in cube" + to_string(i/3) 
-                + to_string(j/3);
-                if(hash.count(rowCheck) || hash.count(colCheck) || hash.count(cubeCheck)){
-                    return false;
+        unordered_set<string> row;
+        unordered_set<string> col;
+        unordered_set<string> cube;
+        int rows = board.size();
+        int cols = board[0].size();
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < cols; j++) {
+                if (board[i][j] != '.') {
+                    char n = board[i][j] - '0';
+                    string rowCheck =
+                        to_string(i) + " row check in " + to_string(n);
+                    string colCheck =
+                        to_string(j) + "col check in" + to_string(n);
+                    string cubeCheck = to_string(i / 3) + to_string(j / 3) +
+                                       "cube check in" + to_string(n);
+                    // row, col and cube checks;
+                    if (row.find(rowCheck) != row.end()) {
+                        return false;
+                    }
+                    if (col.find(colCheck) != col.end()) {
+                        return false;
+                    }
+                    if (cube.find(cubeCheck) != cube.end()) {
+                        return false;
+                    }
+                    row.insert(rowCheck);
+                    col.insert(colCheck);
+                    cube.insert(cubeCheck);
                 }
-                hash.insert(rowCheck);
-                hash.insert(colCheck);
-                hash.insert(cubeCheck);
-            }
             }
         }
         return true;
