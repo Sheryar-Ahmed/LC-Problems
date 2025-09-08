@@ -1,21 +1,25 @@
 class Solution {
 public:
     bool isPalindrome(string s) {
-        int L = 0;
-        int R = s.size()-1;
-        while(L < R){
-            while(!isalnum(s[L]) && L < R){
-                L++;
+        // make the clean and to lower
+        int n = s.size();
+        if(n <= 1) return true;
+        string clean = "";
+        for(auto &c: s){
+            if(isalnum(c)){
+                clean+=tolower(c);
             }
-            while(!isalnum(s[R]) && R > L){
-                R--;
-            }
-            
-            if(tolower(s[L]) != tolower(s[R])){
+        }
+        cout<<clean<<endl;
+        
+        int l = 0;
+        int r = clean.size()-1;
+        while(l < r){
+            if(clean[l] != clean[r]){
                 return false;
             }
-            L++;
-            R--;
+            l++;
+            r--;
         }
         return true;
     }
