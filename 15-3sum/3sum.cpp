@@ -1,30 +1,27 @@
 class Solution {
 public:
     vector<vector<int>> threeSum(vector<int>& nums) {
+        int n = nums.size();
         sort(nums.begin(), nums.end());
         vector<vector<int>> ans;
-        int target = 0;
-        for (int i = 0; i < nums.size() - 2;
-             i++) { // fix one and find two elements
-            if (i > 0 && nums[i] == nums[i - 1])
-                continue; // skip duplicates.
+        for (int i = 0; i < n; i++) {
+            while (i > 0 && i < n && nums[i] == nums[i - 1])
+                i++; // skip duplicates
             int L = i + 1;
-            int R = nums.size() - 1;
+            int R = n - 1;
             while (L < R) {
-                int sum = nums[L] + nums[R] + nums[i];
-                if (sum == target) {
+                int sum = nums[i] + nums[L] + nums[R];
+                if (sum == 0) {
                     ans.push_back({nums[i], nums[L], nums[R]});
-                    // after pushing check for next elments are duplicates skip
-                    // untill
-                    while (L < R && nums[L] == nums[L + 1]) L++;
-                    while (L < R && nums[R] == nums[R - 1]) R--;
+                    while(L < R && nums[L] == nums[L+1]) L++; 
+                    while(L < R && nums[R] == nums[R-1]) R--; 
                     L++;
                     R--;
-                } else if (sum < target) {
+                } else if (sum < 0) {
                     L++;
                 } else {
                     R--;
-                };
+                }
             }
         }
         return ans;
