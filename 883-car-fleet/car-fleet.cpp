@@ -1,26 +1,27 @@
 class Solution {
 public:
     int carFleet(int target, vector<int>& position, vector<int>& speed) {
-        int n = position.size();
-        vector<pair<int, double>> cars;
-
-        for (int i = 0; i < n; ++i) {
-            double time = (double)(target - position[i]) / speed[i];
-            cars.push_back({position[i], time});
+        // we need to calculate the time to reach destination.
+        // formula i think its target - position[i] / speed[i];
+        // we can sort positions by time.
+        // 10-1, 8-1, 5-7, 3-3, 0-12
+        int no_of_car_fleets = 0;
+        vector<pair<int, double>>
+            positionToTime; // position time to reach destination
+        for (int i = 0; i < position.size(); i++) {
+            double time = double(target - position[i]) / speed[i];
+            positionToTime.push_back({position[i], time});
         }
-
-        // Sort by position descending
-        sort(cars.rbegin(), cars.rend());
-
-        stack<double> st;
-        for (auto& car : cars) {
-            double time = car.second;
-            if (st.empty() || time > st.top()) {
-                st.push(time); // new fleet
+        // sort by position in descending order.
+        sort(positionToTime.begin(), positionToTime.end(),
+             [](const auto& a, const auto& b) { return a.first > b.first; });
+        double maxSoFar = 0.0;
+        for (auto& [pos, time] : positionToTime) {
+            if(time > maxSoFar){
+                no_of_car_fleets++;
+                maxSoFar = time;
             }
-            // else it joins the previous fleet (do nothing)
         }
-
-        return st.size();
+        return no_of_car_fleets;
     }
 };
