@@ -5,7 +5,6 @@ public:
         // formula i think its target - position[i] / speed[i];
         // we can sort positions by time.
         // 10-1, 8-1, 5-7, 3-3, 0-12
-        int no_of_car_fleets = 0;
         vector<pair<int, double>>
             positionToTime; // position time to reach destination
         for (int i = 0; i < position.size(); i++) {
@@ -15,13 +14,13 @@ public:
         // sort by position in descending order.
         sort(positionToTime.begin(), positionToTime.end(),
              [](const auto& a, const auto& b) { return a.first > b.first; });
-        double maxSoFar = 0.0;
-        for (auto& [pos, time] : positionToTime) {
-            if(time > maxSoFar){
-                no_of_car_fleets++;
-                maxSoFar = time;
+        stack<double> stack;
+        for (auto& vec : positionToTime) {
+            if (!stack.empty() && vec.second <= stack.top()) {
+                continue;
             }
+            stack.push(vec.second);
         }
-        return no_of_car_fleets;
+        return stack.size();
     }
 };
