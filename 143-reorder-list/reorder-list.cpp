@@ -11,40 +11,47 @@
 class Solution {
 public:
     void reorderList(ListNode* head) {
-        if (!head || !head->next)
-            return;
-        // find the middle
-        ListNode* slow = head;
-        ListNode* fast = head;
-        while (fast && fast->next) {
-            slow = slow->next;
-            fast = fast->next->next;
+        if (!head || !head->next) return;
+
+        // Step 1: Copy the list into a vector for easy access
+        vector<ListNode*> nodes;
+        ListNode* curr = head;
+        while (curr) {
+            nodes.push_back(curr);
+            curr = curr->next;
         }
-        // now my slow pointer is at the middle
-        ListNode* prev = NULL;
-        ListNode* curr = slow->next; // reverse from the slow upto the end;
+
+        // Step 2: Reverse the entire linked list
+        ListNode* prev = nullptr;
+        curr = head;
         while (curr) {
             ListNode* next = curr->next;
             curr->next = prev;
             prev = curr;
             curr = next;
         }
-        // now my curr is successfully reversed
-        slow->next = nullptr; // now our head is just first half;
-        // merge
-        ListNode* first = head;
-        ListNode* second = prev; // prev our reversed half
-        while (second) {
-            // get the both next
-            ListNode* temp1 = first->next;
-            ListNode* temp2 = second->next;
-            // first->next will be the second element
-            first->next = second;
-            // second->next will be the first->next
-            second->next = temp1;
-            // shift the frist and second
-            first = temp1;
-            second = temp2;
+        // now prev is the head of reversed list
+
+        // Step 3: Merge original order and reversed order
+        int n = nodes.size();
+        ListNode* p1 = head;
+        ListNode* p2 = prev;
+        ListNode dummy(0);
+        ListNode* tail = &dummy;
+
+        for (int i = 0; i < n / 2; i++) {
+            tail->next = nodes[i];   // original node
+            tail = tail->next;
+
+            tail->next = nodes[n - 1 - i]; // reversed node
+            tail = tail->next;
         }
+
+        if (n % 2 == 1) {
+            tail->next = nodes[n / 2];
+            tail = tail->next;
+        }
+
+        tail->next = nullptr;
     }
 };
