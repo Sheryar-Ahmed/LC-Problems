@@ -34,8 +34,6 @@ public:
 
         // Step 3: Merge original order and reversed order
         int n = nodes.size();
-        ListNode* p1 = head;
-        ListNode* p2 = prev;
         ListNode dummy(0);
         ListNode* tail = &dummy;
 
