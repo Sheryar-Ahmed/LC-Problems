@@ -6,22 +6,26 @@
  *     TreeNode *right;
  *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
  *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
- *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left),
+ * right(right) {}
  * };
  */
 class Solution {
-private:
-TreeNode* prev = nullptr;
+    TreeNode* prev = nullptr; // we know inorder must be strictly increasing.
 public:
-    bool isValidBST(TreeNode* root) {
-        return inorder(root);
-    }
-    bool inorder(TreeNode* root){
-        if(!root) return true;
-        if(!inorder(root->left)) return false;
-        if(prev && root->val <= prev->val) return false;
+    bool isValidBST(TreeNode* root) { return inorder(root); }
+    bool inorder(TreeNode* root) {
+        if (!root)
+            return true;
+        if (!inorder(root->left)) {
+            return false;
+        }
+        if (prev && root->val <= prev->val)
+            return false;
         prev = root;
-        if(!inorder(root->right)) return false;
+        if (!inorder(root->right)) {
+            return false;
+        }
         return true;
     }
 };
