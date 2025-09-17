@@ -12,10 +12,12 @@
 class Solution {
 public:
     int maxDepth(TreeNode* root) {
-        // as i know the depth is basically post order and need to calculate maximum
+        return dfs(root);
+    }
+    int dfs(TreeNode* root){
         if(!root) return 0;
-        int left = maxDepth(root->left);
-        int right = maxDepth(root->right);
+        int left = root->left ? dfs(root->left) : 0;
+        int right = root-> right ? dfs(root->right) : 0;
         return 1+max(left, right);
     }
 };
