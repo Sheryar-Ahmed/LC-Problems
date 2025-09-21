@@ -1,12 +1,13 @@
 class Solution {
+vector<int> dp;
 public:
     int climbStairs(int n) {
-        vector<int> memo(n+1, -1);
-        return solve(memo, n);
+        dp.assign(n+1, -1);
+        return helper(n);
     }
-    int solve (vector<int>& memo, int n){
-        if(n < 2) return 1;
-        if(memo[n] != -1) return memo[n];
-        return memo[n] = solve(memo, n-1)+solve(memo, n-2); // febonacci related problem
+    int helper(int n){
+        if(n <= 1) return 1;
+        if(dp[n] != -1) return dp[n];
+        return dp[n] = helper(n-1)+helper(n-2);
     }
 };
