@@ -1,17 +1,17 @@
 class Solution {
+vector<int> dp;
 public:
     int rob(vector<int>& nums) {
         int n = nums.size();
-        vector<int> memo(n, -1);
-        return solve(n-1, memo, nums);
+        dp.assign(n, -1);
+        return solve(0, nums);
     }
-
-    int solve(int i, vector<int>& memo, vector<int>& nums){
-        if(i < 0) return 0;          // no houses left
-        if(memo[i] != -1) return memo[i];
-
-        // rob this house or skip it
-        return memo[i] = max(nums[i] + solve(i-2, memo, nums),
-                             solve(i-1, memo, nums));
+    int solve(int n, vector<int>& nums){
+        if(n >= nums.size()) return 0;
+        if(dp[n] != -1) return dp[n];
+        // rob current house
+        int robCurr = nums[n]+solve(n+2, nums); // we can rob the next one.
+        int skipCurr = solve(n+1, nums); // immediatly rob the nextone;
+        return dp[n] = max(robCurr, skipCurr);
     }
 };
