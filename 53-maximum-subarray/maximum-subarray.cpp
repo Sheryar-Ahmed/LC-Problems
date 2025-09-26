@@ -1,16 +1,15 @@
 class Solution {
 public:
     int maxSubArray(vector<int>& nums) {
-        // greedy approach here is whenever our sum hits negative reset it to 0
-        int sum = 0;
-        int MaxSum = nums[0];
-        for(int i=0; i <= nums.size()-1; i++){
-            if(sum < 0){
-                sum = 0;
-            }
-            sum+=nums[i];
-            MaxSum = max(MaxSum, sum);
+        // with dp i think its gonna be O(n2)
+        int n = nums.size();
+        vector<int> dp(n); // largest sum at each index i
+        dp[0] = nums[0];
+        int ans = nums[0];
+        for (int i = 1; i < n; i++) {
+            dp[i] = max(nums[i], dp[i - 1] + nums[i]);
+            ans = max(ans, dp[i]);
         }
-        return MaxSum;
+        return ans;
     }
 };
