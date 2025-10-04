@@ -1,30 +1,27 @@
 class Solution {
 public:
+    void dfs(int i, int j, int m, int n, vector<vector<char>>& grid) {
+        if (i < 0 || i >= m || j < 0 || j >= n || grid[i][j] == '0') {
+            return;
+        }
+        grid[i][j] = '0'; // visited
+        dfs(i + 1, j, m, n, grid);
+        dfs(i - 1, j, m, n, grid);
+        dfs(i, j + 1, m, n, grid);
+        dfs(i, j - 1, m, n, grid);
+    }
     int numIslands(vector<vector<char>>& grid) {
-        int number = 0;
-        int rows = grid.size();
-        int cols = grid[0].size();
-        vector<vector<bool>> visited(rows, vector<bool>(cols, false));
-        for (int i = 0; i < rows; i++) {
-            for (int j = 0; j < cols; j++) {
-                if (!visited[i][j] && grid[i][j] == '1') {
-                    dfs(i, j, rows, cols, grid, visited);
-                    number++;
+        int m = grid.size();
+        int n = grid[0].size();
+        int count = 0;
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                if (grid[i][j] == '1') {
+                    count++;
+                    dfs(i, j, m, n, grid);
                 }
             }
         }
-        return number;
-    }
-    void dfs(int i, int j, int& rows, int& cols, vector<vector<char>>& grid,
-             vector<vector<bool>>& visited) {
-        if (i < 0 || i >= rows || j < 0 || j >= cols || visited[i][j] ||
-            grid[i][j] == '0') {
-            return;
-        }
-        visited[i][j] = true;
-        dfs(i + 1, j, rows, cols, grid, visited);
-        dfs(i - 1, j, rows, cols, grid, visited);
-        dfs(i, j + 1, rows, cols, grid, visited);
-        dfs(i, j - 1, rows, cols, grid, visited);
+        return count;
     }
 };
