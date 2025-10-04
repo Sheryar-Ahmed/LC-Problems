@@ -20,27 +20,25 @@ public:
 */
 
 class Solution {
-private:
-unordered_map<Node*, Node*> old_to_clone;
-void dfs(Node* node){
-    for(auto &n: node->neighbors){
-        if(old_to_clone.find(n) == old_to_clone.end()){
-            Node* clone = new Node(n->val);
-            old_to_clone[n] = clone;
-            old_to_clone[node]->neighbors.push_back(clone);
-            dfs(n);
-        }else{
-            old_to_clone[node]->neighbors.push_back(old_to_clone[n]);
+public:
+    void dfs(Node* node, unordered_map<Node*, Node*>& oldToClone) {
+        if(!node) return;
+        for (auto nei : node->neighbors) {
+            if (oldToClone[nei]) {
+                oldToClone[node]->neighbors.push_back(oldToClone[nei]);
+            } else {
+                oldToClone[nei] = new Node(nei->val);
+                oldToClone[node]->neighbors.push_back(oldToClone[nei]);
+                dfs(nei, oldToClone);
+            }
         }
     }
-}
-public:
     Node* cloneGraph(Node* node) {
+        unordered_map<Node*, Node*> oldToClone;
         if(!node) return nullptr;
-        Node* clone = new Node(node->val);
-        old_to_clone.clear();
-        old_to_clone[node] = clone;
-        dfs(node);
-        return clone;
+        oldToClone[node] = new Node(node->val);
+
+        dfs(node, oldToClone);
+        return oldToClone[node];
     }
 };
