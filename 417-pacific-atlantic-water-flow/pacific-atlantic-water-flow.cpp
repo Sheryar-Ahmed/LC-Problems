@@ -1,41 +1,42 @@
 class Solution {
-    void dfs(int i, int j, int rows, int cols, vector<vector<bool>>& reachable,
-             vector<vector<int>>& heights) {
-        vector<pair<int, int>> dirs = {{0, 1}, {1, 0}, {0, -1}, {-1, 0}};
-                    reachable[i][j] = true;
-        for (auto& dir : dirs) {
-            int ni = i + dir.first;
-            int nj = j + dir.second;
-            if (ni < 0 || ni >= rows || nj < 0 || nj >= cols) {
+public:
+    void dfs(int i, int j, int m, int n, vector<vector<int>>& heights,
+             vector<vector<bool>>& ocean) {
+        ocean[i][j] = true;
+        int dirs[4][2] = {{1, 0}, {-1, 0}, {0, 1}, {0, -1}};
+        for (auto dir : dirs) {
+            int x = i + dir[0];
+            int y = j + dir[1];
+            if (x < 0 || x >= m || y < 0 || y >= n || ocean[x][y]) {
                 continue;
             }
-            if (reachable[ni][nj])
-                continue;
-            if (heights[ni][nj] < heights[i][j])
-                continue;
-            dfs(ni, nj, rows, cols, reachable, heights);
+            if (heights[i][j] <= heights[x][y]) {
+                dfs(x, y, m, n, heights, ocean);
+            }
         }
-    }
-
-public:
+    };
     vector<vector<int>> pacificAtlantic(vector<vector<int>>& heights) {
-        int rows = heights.size();
-        int cols = heights[0].size();
-        vector<vector<bool>> atlantic(rows, vector<bool>(cols));
-        vector<vector<bool>> pacific(rows, vector<bool>(cols));
-        for (int i = 0; i < rows; i++)
-            dfs(i, 0, rows, cols, pacific, heights);
-        for (int j = 0; j < cols; j++)
-            dfs(0, j, rows, cols, pacific, heights);
-
-        for (int i = 0; i < rows; i++)
-            dfs(i, cols - 1, rows, cols, atlantic, heights);
-        for (int j = 0; j < cols; j++)
-            dfs(rows - 1, j, rows, cols, atlantic, heights);
-
+        int m = heights.size();
+        int n = heights[0].size();
+        vector<vector<bool>> pacific(m, vector<bool>(n, false));
+        vector<vector<bool>> atlantic(m, vector<bool>(n, false));
+        // for pacific top row and left most col
+        for (int i = 0; i < n; i++) {
+            dfs(0, i, m, n, heights, pacific);
+        }
+        for (int j = 0; j < m; j++) {
+            dfs(j, 0, m, n, heights, pacific);
+        }
+        // for atlantic right most and right most bottom
+        for (int i = 0; i < m; i++) {
+            dfs(i, n-1, m, n, heights, atlantic);
+        }
+        for (int j = 0; j < n; j++) {
+            dfs(m-1, j, m, n, heights, atlantic);
+        }
         vector<vector<int>> ans;
-        for (int i = 0; i < rows; i++) {
-            for (int j = 0; j < cols; j++) {
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
                 if (atlantic[i][j] && pacific[i][j]) {
                     ans.push_back({i, j});
                 }
