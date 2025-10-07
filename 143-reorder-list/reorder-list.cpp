@@ -11,45 +11,33 @@
 class Solution {
 public:
     void reorderList(ListNode* head) {
-        if (!head || !head->next) return;
-
-        // Step 1: Copy the list into a vector for easy access
-        vector<ListNode*> nodes;
-        ListNode* curr = head;
-        while (curr) {
-            nodes.push_back(curr);
-            curr = curr->next;
+        // find middle and reverse from the middle->next;
+        ListNode* slow = head;
+        ListNode* fast = head;
+        while (fast && fast->next) {
+            slow = slow->next;
+            fast = fast->next->next;
         }
-
-        // Step 2: Reverse the entire linked list
+        ListNode* mid = slow->next;
         ListNode* prev = nullptr;
-        curr = head;
-        while (curr) {
-            ListNode* next = curr->next;
-            curr->next = prev;
-            prev = curr;
-            curr = next;
+        ListNode* rev_curr = mid;
+        while (rev_curr) {
+            ListNode* next = rev_curr->next;
+            rev_curr->next = prev;
+            prev = rev_curr;
+            rev_curr = next;
         }
-        // now prev is the head of reversed list
-
-        // Step 3: Merge original order and reversed order
-        int n = nodes.size();
-        ListNode dummy(0);
-        ListNode* tail = &dummy;
-
-        for (int i = 0; i < n / 2; i++) {
-            tail->next = nodes[i];   // original node
-            tail = tail->next;
-
-            tail->next = nodes[n - 1 - i]; // reversed node
-            tail = tail->next;
+        slow->next = nullptr; // breakdown
+        ListNode* first = head;
+        ListNode* second = prev;
+        while (second) {
+            // store current's next
+            ListNode* temp1 = first->next;
+            ListNode* temp2 = second->next;
+            first->next = second;
+            second->next = temp1;
+            first = temp1;
+            second = temp2;
         }
-
-        if (n % 2 == 1) {
-            tail->next = nodes[n / 2];
-            tail = tail->next;
-        }
-
-        tail->next = nullptr;
     }
 };
