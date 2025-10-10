@@ -1,17 +1,16 @@
 class Solution {
 public:
     vector<int> dailyTemperatures(vector<int>& temperatures) {
-        // for each day find the next greater hoter day.
-        stack<int> stack;
+        stack<int> mst;
         int n = temperatures.size();
         vector<int> ans(n, 0);
-        for(int i=0;i < n; i++){
-            while(!stack.empty() && temperatures[i] > temperatures[stack.top()]){
-                int idx = stack.top();
-                stack.pop();
+        for (int i = 0; i < n; i++) {
+            while (!mst.empty() && temperatures[i] > temperatures[mst.top()]) {
+                int idx = mst.top();
+                mst.pop();
                 ans[idx] = i-idx;
             }
-            stack.push(i);
+            mst.push(i);
         }
         return ans;
     }
