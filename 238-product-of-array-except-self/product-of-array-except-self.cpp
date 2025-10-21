@@ -2,24 +2,22 @@ class Solution {
 public:
     vector<int> productExceptSelf(vector<int>& nums) {
         int n = nums.size();
-        if(n < 2 ) return nums;
-        vector<int> prefixProd(n, 1);
-        vector<int> suffixProd(n, 1);
-        
-        prefixProd[0] = nums[0];
+        vector<int> prefix(n, 1);
+        vector<int> suffix(n, 1);
+        prefix[0] = nums[0];
+
         for (int i = 1; i < n; i++) {
-            prefixProd[i] = prefixProd[i - 1] * nums[i];
+            prefix[i] = prefix[i - 1] * nums[i];
         }
-        suffixProd[n - 1] = nums[n - 1];
+        suffix[n - 1] = nums[n - 1];
         for (int i = n - 2; i >= 0; i--) {
-            suffixProd[i] = suffixProd[i + 1] * nums[i];
+            suffix[i] = suffix[i + 1] * nums[i];
         }
-        vector<int> ans;
-        // now i have both suffix and prefix products
-        for (int i = 0; i < n; i++) {
-            int calc = (i - 1 >= 0 ? prefixProd[i - 1] : 1) *
-                       (i + 1 < n ? suffixProd[i + 1] : 1);
-            ans.push_back(calc);
+        vector<int> ans(n);
+        ans[0] = suffix[1];
+        ans[n - 1] = prefix[n - 2];
+        for (int i = 1; i < n - 1; i++) {
+            ans[i] = prefix[i - 1] * suffix[i + 1];
         }
         return ans;
     }
