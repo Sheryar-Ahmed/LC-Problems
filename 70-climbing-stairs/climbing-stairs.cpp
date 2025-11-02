@@ -1,16 +1,15 @@
 class Solution {
 public:
-        vector<int> memo;
     int climbStairs(int n) {
-        memo.resize(n, -1);
-        return dfs(n, 0);
+        vector<int> dp(n, -1);
+        return helper(n, 0, dp);
     }
-    int dfs(int n, int step){
-        if(step > n) return 0;
-        if(step == n) return 1;
-        if(memo[step] != -1) return memo[step];
-        int res1 = dfs(n, step+1);
-        int res2 = dfs(n, step+2);
-        return memo[step] = res1+res2;
+    int helper(int n, int i, vector<int>& dp){
+        if(i == n) return 1;
+        if(i > n) return 0;
+        if(dp[i] != -1) return dp[i];
+        int one = helper(n, i+1, dp);
+        int two = helper(n, i+2, dp);
+        return dp[i] = one+two;
     }
 };
