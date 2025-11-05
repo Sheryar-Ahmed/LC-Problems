@@ -21,24 +21,23 @@ public:
 
 class Solution {
 public:
-    void dfs(Node* node, unordered_map<Node*, Node*>& oldToClone) {
-        if(!node) return;
-        for (auto nei : node->neighbors) {
-            if (oldToClone[nei]) {
-                oldToClone[node]->neighbors.push_back(oldToClone[nei]);
-            } else {
-                oldToClone[nei] = new Node(nei->val);
-                oldToClone[node]->neighbors.push_back(oldToClone[nei]);
-                dfs(nei, oldToClone);
-            }
-        }
-    }
-    Node* cloneGraph(Node* node) {
-        unordered_map<Node*, Node*> oldToClone;
-        if(!node) return nullptr;
-        oldToClone[node] = new Node(node->val);
+    unordered_map<Node*, Node*> visited;
 
-        dfs(node, oldToClone);
-        return oldToClone[node];
+    Node* cloneGraph(Node* node) {
+        if (!node) return nullptr;
+        return dfs(node);
+    }
+
+    Node* dfs(Node* node) {
+        if (visited[node]) return visited[node];
+
+        Node* clone = new Node(node->val);
+        visited[node] = clone;
+
+        for (auto neighbor : node->neighbors) {
+            clone->neighbors.push_back(dfs(neighbor));
+        }
+
+        return clone;
     }
 };
