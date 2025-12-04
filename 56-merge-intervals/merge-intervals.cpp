@@ -1,19 +1,19 @@
 class Solution {
 public:
     vector<vector<int>> merge(vector<vector<int>>& intervals) {
-        // sort the intervals by start
-        sort(intervals.begin(), intervals.end(), [](auto const &a, auto const &b){
-            return a[0] < b[0]; // ascending order by start
+        // sort them
+        sort(intervals.begin(), intervals.end(), [](const auto &a,const auto &b) {
+            return a[0] < b[0];
         });
         vector<vector<int>> ans;
         ans.push_back(intervals[0]);
-        for(int i=1; i < intervals.size(); i++){
-            int s = intervals[i][0]; // 8, 1
-            int e = intervals[i][1]; // 10, 6
-            if(s <= ans.back()[1] && e > ans.back()[1]){
-                ans.back()[1] = e;
-            }else if(s > ans.back()[1] && e > ans.back()[1]){
-                ans.push_back({s, e});
+        for (int i = 1; i < intervals.size(); i++) {
+            if (intervals[i][0] <= ans.back()[1]) {
+                // its a overlap
+                ans.back()[0] = min(ans.back()[0], intervals[i][0]);
+                ans.back()[1] = max(ans.back()[1], intervals[i][1]);
+            }else{
+                ans.push_back(intervals[i]);
             }
         }
         return ans;
