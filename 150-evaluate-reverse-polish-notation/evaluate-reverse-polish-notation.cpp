@@ -1,46 +1,46 @@
 class Solution {
 public:
     int evalRPN(vector<string>& tokens) {
+        if(tokens.size() == 1) return stoi(tokens[0]);  
         stack<int> st;
-        int ans = 0;
-        int s, f;
-        for(auto t: tokens){
-            if(t == "+"){
-                if(!st.empty()){
-                s = st.top();
+        int result = 0;
+        for (int i = 0; i < tokens.size(); i++) {
+            int a, b;
+            if (tokens[i] == "*") {
+                a = st.top();
                 st.pop();
-                f= st.top();
+                b = st.top();
                 st.pop();
-                st.push(f+s);
-                }
-            }else if(t == "-"){
-                if(!st.empty()){
-                s = st.top();
+                st.push(b * a);
+                result = b*a;
+
+            } else if (tokens[i] == "/") {
+                a = st.top();
                 st.pop();
-                f= st.top();
+                b = st.top();
                 st.pop();
-                st.push(f-s);
-                }
-            }else if(t == "*"){
-                if(!st.empty()){
-                s = st.top();
+                st.push(b / a);
+                result = static_cast<int>(b/a);
+
+            } else if (tokens[i] == "+") {
+                a = st.top();
                 st.pop();
-                f= st.top();
+                b = st.top();
                 st.pop();
-                st.push(f*s);
-                }
-            }else if(t == "/"){
-                if(!st.empty()){
-                s = st.top();
+                st.push(b+a);
+                result = b+a;
+
+            } else if (tokens[i] == "-") {
+                a = st.top();
                 st.pop();
-                f= st.top();
+                b = st.top();
                 st.pop();
-                st.push(f/s);
-                }
-            }else {
-                st.push(stoi(t));
+                st.push(b - a);
+                result = b - a;
+            } else {
+                st.push(stoi(tokens[i]));
             }
         }
-        return st.top();
+        return result;
     }
 };
