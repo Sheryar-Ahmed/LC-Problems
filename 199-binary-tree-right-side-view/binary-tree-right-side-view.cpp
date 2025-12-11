@@ -1,29 +1,43 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left),
+ * right(right) {}
+ * };
+ */
 class Solution {
 public:
     vector<int> rightSideView(TreeNode* root) {
-        vector<int> view;
-        if (!root) return view;
-
+        if (!root)
+            return {};
+        vector<int> ans; // 1, 3
+        ans.push_back(root->val);
         queue<TreeNode*> q;
-        q.push(root);
-
+        q.push(root); // 2, 3
         while (!q.empty()) {
-            int levelSize = q.size();  // Nodes in current level
-
-            for (int i = 0; i < levelSize; i++) {
-                TreeNode* node = q.front();
-                q.pop();
-
-                // If it's the last node in this level → visible from right
-                if (i == levelSize - 1) {
-                    view.push_back(node->val);
+            int size = q.size(); // 2
+            vector<int> curr;
+            while (size--) {
+                TreeNode* top = q.front();
+                q.pop(); // 2
+                if (top->left) {
+                    q.push(top->left);
+                    curr.push_back(top->left->val);
                 }
-
-                if (node->left) q.push(node->left);
-                if (node->right) q.push(node->right);
+                if (top->right) {
+                    q.push(top->right);
+                    curr.push_back(top->right->val);
+                }
+            }
+            if (curr.size() > 0) {
+                ans.push_back(curr[curr.size() - 1]);
             }
         }
-
-        return view;
+        return ans;
     }
 };
