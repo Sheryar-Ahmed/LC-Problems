@@ -17,6 +17,7 @@ public:
         int water = 0;
         for(int i=0; i < n; i++){
             int contain = min(maxLeft[i], maxRight[i]) - height[i];
+            cout<<contain<<endl;
             if(contain >= 0){
                 water+=contain;
             }
