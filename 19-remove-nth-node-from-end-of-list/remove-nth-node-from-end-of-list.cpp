@@ -11,21 +11,27 @@
 class Solution {
 public:
     ListNode* removeNthFromEnd(ListNode* head, int n) {
-        // intuitn is to intially make the gap between the left and right pointer and move them so when the right pointer reaches end our left pointer will be at the node that's needs to be removed, inorder to be at the prev node we will do create a dummy node and makes its next to the head and initalize our left to that dummy so will be at the prev node
-        ListNode dummy(0);
-        dummy.next = head;
-        ListNode* left = &dummy;
-        ListNode* right = head;
-        while(n--) {
-            right = right->next;
+        if (!head)
+            return head;
+        ListNode* prev = head;
+        ListNode* curr = head;
+        while (n--) {
+            curr = curr->next;
         }
-        // now just need to shift both left and right
-        while(right) {
-            left = left->next;
-            right = right->next;
+        if (!curr) {
+            ListNode* temp = head;
+            head = head->next;
+            delete temp;
+            return head;
         }
 
-        left->next = left->next->next;
-        return dummy.next;
+        while (curr->next) {
+            prev = prev->next;
+            curr = curr->next;
+        }
+        ListNode* temp = prev->next;
+        prev->next = temp->next;
+        delete temp;
+        return head;
     }
 };
