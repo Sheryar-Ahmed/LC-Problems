@@ -1,15 +1,14 @@
 class Solution {
 public:
     int findDuplicate(vector<int>& nums) {
-        int slow = nums[0];
-        int fast = nums[0];
-        do{
-            slow = nums[slow];
-            fast = nums[nums[fast]]; // why now just fast because if i do both has initial 0 will be equal
-        }while(slow != fast);
-        // found intersection
+        int slow = nums[0]; // 2
+        int fast = nums[0]; // 2
+        do {
+            slow = nums[slow];       // 9
+            fast = nums[nums[fast]]; // 1
+        } while (slow != fast);
         slow = nums[0];
-        while(fast != slow){
+        while (slow != fast) {
             slow = nums[slow];
             fast = nums[fast];
         }
