@@ -6,31 +6,25 @@
  *     TreeNode *right;
  *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
  *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
- *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left),
- * right(right) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
  * };
  */
 class Solution {
 public:
     bool isSubtree(TreeNode* root, TreeNode* subRoot) {
-        if (!root)
-            return false;
-        if (root->val == subRoot->val) {
-            if (isSameTree(root, subRoot)) {
-                return true;
-            }
-        };
-        return isSubtree(root->left, subRoot) ||
-               isSubtree(root->right, subRoot);
+        if(!root) return false;
+        if(root->val == subRoot->val) {
+            if(isSameTree(root, subRoot)) return true;
+        }
+        return isSubtree(root->left, subRoot) || isSubtree(root->right, subRoot);
     }
-    bool isSameTree(TreeNode* root, TreeNode* subRoot) {
-        if (!root && !subRoot)
+        bool isSameTree(TreeNode* p, TreeNode* q) {
+        if (!p && !q)
             return true;
-        if (!root || !subRoot)
+        if (!p || !q)
             return false;
-        if (root->val != subRoot->val)
+        if (p->val != q->val)
             return false;
-        return isSameTree(root->left, subRoot->left) &&
-               isSameTree(root->right, subRoot->right);
+        return isSameTree(p->left, q->left) && isSameTree(p->right, q->right);
     }
 };
