@@ -11,21 +11,14 @@
  * };
  */
 class Solution {
-    TreeNode* prev = nullptr; // we know inorder must be strictly increasing.
 public:
-    bool isValidBST(TreeNode* root) { return inorder(root); }
-    bool inorder(TreeNode* root) {
+    bool isValidBST(TreeNode* root, long long min = LONG_MIN,
+                    long long max = LONG_MAX) {
         if (!root)
             return true;
-        if (!inorder(root->left)) {
+        if (root->val <= min || root->val >= max)
             return false;
-        }
-        if (prev && root->val <= prev->val)
-            return false;
-        prev = root;
-        if (!inorder(root->right)) {
-            return false;
-        }
-        return true;
+        return isValidBST(root->left, min, root->val)
+         && isValidBST(root->right, root->val, max);
     }
 };
