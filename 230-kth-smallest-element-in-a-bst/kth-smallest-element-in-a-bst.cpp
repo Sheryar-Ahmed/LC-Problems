@@ -6,21 +6,29 @@
  *     TreeNode *right;
  *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
  *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
- *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left),
+ * right(right) {}
  * };
  */
 class Solution {
 public:
+    int count = 0;
+    int result = 0;
     int kthSmallest(TreeNode* root, int k) {
-        // inorder traversal and do that upto k,return the kth element
-        vector<int> sorted;
-        inorder(root, sorted);
-        return sorted[k-1];
+        if (!root)
+            return result;
+        inorder(root, k);
+        return result;
     }
-    void inorder(TreeNode* root, vector<int>& sorted){
-        if(!root) return;
-        inorder(root->left, sorted);
-        sorted.push_back(root->val);
-        inorder(root->right,sorted);
+    void inorder(TreeNode* root, int k) {
+        if (!root)
+            return;
+        inorder(root->left, k);
+        count++;
+        if (count == k) {
+            result = root->val;
+            return;
+        }
+        inorder(root->right, k);
     }
 };
