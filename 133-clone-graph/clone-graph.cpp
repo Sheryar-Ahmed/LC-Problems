@@ -22,22 +22,17 @@ public:
 class Solution {
 public:
     unordered_map<Node*, Node*> visited;
-
     Node* cloneGraph(Node* node) {
-        if (!node) return nullptr;
+        if(!node) return node;
         return dfs(node);
     }
-
-    Node* dfs(Node* node) {
-        if (visited[node]) return visited[node];
-
+    Node* dfs(Node* node){
+        if(visited[node]) return visited[node];
         Node* clone = new Node(node->val);
         visited[node] = clone;
-
-        for (auto neighbor : node->neighbors) {
-            clone->neighbors.push_back(dfs(neighbor));
+        for(auto &neigh: node->neighbors){
+            clone->neighbors.push_back(dfs(neigh));
         }
-
         return clone;
     }
 };
