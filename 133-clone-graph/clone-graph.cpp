@@ -1,38 +1,32 @@
-/*
-// Definition for a Node.
-class Node {
-public:
-    int val;
-    vector<Node*> neighbors;
-    Node() {
-        val = 0;
-        neighbors = vector<Node*>();
-    }
-    Node(int _val) {
-        val = _val;
-        neighbors = vector<Node*>();
-    }
-    Node(int _val, vector<Node*> _neighbors) {
-        val = _val;
-        neighbors = _neighbors;
-    }
-};
-*/
-
 class Solution {
 public:
-    unordered_map<Node*, Node*> visited;
     Node* cloneGraph(Node* node) {
-        if(!node) return node;
-        return dfs(node);
-    }
-    Node* dfs(Node* node){
-        if(visited[node]) return visited[node];
-        Node* clone = new Node(node->val);
-        visited[node] = clone;
-        for(auto &neigh: node->neighbors){
-            clone->neighbors.push_back(dfs(neigh));
+        if(node == nullptr)
+            return nullptr;
+
+        unordered_map<Node*, Node*> visited;
+        queue<Node*> q;
+
+        // clone starting node
+        visited[node] = new Node(node->val);
+        q.push(node);
+
+        while(!q.empty()) {
+            Node* curr = q.front();
+            q.pop();
+
+            for(Node* neigh : curr->neighbors) {
+                // if neighbor not cloned yet
+                if(visited.find(neigh) == visited.end()) {
+                    visited[neigh] = new Node(neigh->val);
+                    q.push(neigh);
+                }
+
+                // connect clone
+                visited[curr]->neighbors.push_back(visited[neigh]);
+            }
         }
-        return clone;
+
+        return visited[node];
     }
 };
