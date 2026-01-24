@@ -1,47 +1,50 @@
 class Solution {
 public:
-//  Reverse Thinking
-    void DFS(vector<vector<char>>& board, int i, int j, int m, int n) {
-        if(i<0 or j<0 or i>=m or j>=n or board[i][j] != 'O') return;
-        board[i][j] = '#';
-        DFS(board, i-1, j, m, n);
-        DFS(board, i+1, j, m, n);
-        DFS(board, i, j-1, m, n);
-        DFS(board, i, j+1, m, n);
+    int rows, cols;
+
+    void dfs(vector<vector<char>>& board, int r, int c) {
+        // out of bounds or not 'O'
+        if (r < 0 || r >= rows || c < 0 || c >= cols)
+            return;
+        if (board[r][c] != 'O')
+            return;
+
+        // mark as safe
+        board[r][c] = '#';
+
+        // explore neighbors
+        dfs(board, r + 1, c);
+        dfs(board, r - 1, c);
+        dfs(board, r, c + 1);
+        dfs(board, r, c - 1);
     }
-    
+
     void solve(vector<vector<char>>& board) {
-      
-     int m = board.size();
-        
-      if(m == 0) return;  
-        
-     int n = board[0].size();
-     
-     //unsurrounded regions, Moving over firts and last column   
-     for(int i=0; i<m; i++) {
-         if(board[i][0] == 'O')
-             DFS(board, i, 0, m, n);
-         if(board[i][n-1] == 'O')
-             DFS(board, i, n-1, m, n);
-     }
-        
-        
-     //unsurrounded, Moving over first and last row   
-     for(int j=0; j<n; j++) {
-         if(board[0][j] == 'O')
-             DFS(board, 0, j, m, n);
-         if(board[m-1][j] == 'O')
-             DFS(board, m-1, j, m, n);
-     }
-    // we have set # to the unsurrounded border regions. if we find # we will turn back to )O and if we found O then turn it to X.
-     for(int i=0; i<m; i++)
-         for(int j=0; j<n; j++)
-         {
-             if(board[i][j] == 'O')
-                 board[i][j] = 'X';
-             if(board[i][j] == '#')
-                 board[i][j] = 'O';
-         }
+        if (board.empty())
+            return;
+
+        rows = board.size();
+        cols = board[0].size();
+
+        // 1) Run DFS from border 'O's
+        for (int r = 0; r < rows; r++) {
+            dfs(board, r, 0);
+            dfs(board, r, cols - 1);
+        }
+
+        for (int c = 0; c < cols; c++) {
+            dfs(board, 0, c);
+            dfs(board, rows - 1, c);
+        }
+
+        // 2) Flip surrounded regions
+        for (int r = 0; r < rows; r++) {
+            for (int c = 0; c < cols; c++) {
+                if (board[r][c] == 'O')
+                    board[r][c] = 'X';   // surrounded
+                else if (board[r][c] == '#')
+                    board[r][c] = 'O';   // safe
+            }
+        }
     }
 };
