@@ -1,20 +1,23 @@
 class Solution {
 public:
     int countSubstrings(string s) {
-            int count=0;
-            for(int i=0; i < s.size()-1; i++){
-                middleout(s, i, i, count); //odd cases
-                middleout(s, i, i+1, count); //even cases
-            }
-            return count+1;
-    }
+        int count = 0;
+        if(s.empty()) return 0;
+        if(s.size() == 1) return 1;
+        for (int i = 0; i < s.size(); i++) {
+            for (int j = i; j < s.size(); j++) {
+                int l = i, r = j;
+                while (l < r && s[l] == s[r]) {
+                    l++;
+                    r--;
+                }
 
-private:
-    void middleout(const string& s, int i,int j, int & count){
-        while( i >= 0 && j <= s.size()-1 && s[i] == s[j]){
-            i--;
-            j++;
-            count++;
+                if (l >= r) {
+                    count++;
+                }
+            }
         }
+
+        return count;
     }
 };
