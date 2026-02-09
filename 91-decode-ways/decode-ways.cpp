@@ -1,28 +1,23 @@
 class Solution {
 public:
     int numDecodings(string s) {
-        if (s.empty() || s[0] == '0')
+        if (s[0] == '0')
             return 0;
+        int n = s.size();
+        vector<int> dp(n + 1);
 
-        int twoBack = 1; // dp[i-2]
-        int oneBack = 1; // dp[i-1]
+        dp[0] = 1; // there is one way to make an empty string
+        dp[1] = 1; // for each element 1
 
-        for (int i = 1; i < s.size(); i++) {
-            int curr = 0;
+        for (int i = 2; i <= n; i++) {
+            int d = stoi(s.substr(i - 1, 1));
+            int dd = stoi(s.substr(i - 2, 2));
 
-            if (s[i] != '0') {
-                curr += oneBack;
-            }
-
-            int twoDigit = stoi(s.substr(i - 1, 2)); // i-1 because we are taking two digit in every case increasing order.
-            if (twoDigit >= 10 && twoDigit <= 26) {
-                curr += twoBack;
-            }
-
-            twoBack = oneBack;
-            oneBack = curr;
+            if (d >= 1 && d <= 9)
+                dp[i] += dp[i - 1];
+            if (dd >= 10 && dd <= 26)
+                dp[i] += dp[i - 2];
         }
-
-        return oneBack;
+        return dp[n];
     }
 };
