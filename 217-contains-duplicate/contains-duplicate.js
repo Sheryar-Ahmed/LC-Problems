@@ -4,12 +4,20 @@
  */
 var containsDuplicate = function(nums) {
     if(nums.length < 2) return false;
-    // with sort
-    nums.sort((a,b) => a-b);
-    for(let i=0; i < nums.length; i++){
-        if(i > 0 && nums[i] == nums[i-1]) return true;
+    // with hashtable
+    let map = new Map();
+    for(let x of nums){
+        map.set(x, (map.get(x) || 0) +1);
+        if(map.get(x) > 1) return true;
     }
     return false;
+
+    // with sort
+    // nums.sort((a,b) => a-b);
+    // for(let i=0; i < nums.length; i++){
+    //     if(i > 0 && nums[i] == nums[i-1]) return true;
+    // }
+    // return false;
     // with set
     // let set = new Set();
     // for(x of nums){
