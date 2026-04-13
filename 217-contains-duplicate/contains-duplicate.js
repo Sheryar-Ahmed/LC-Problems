@@ -2,13 +2,13 @@
  * @param {number[]} nums
  * @return {boolean}
  */
-var containsDuplicate = function(nums) {
-    if(nums.length < 2) return false;
+var containsDuplicate = function (nums) {
+    if (nums.length < 2) return false;
     // with hashtable
     let map = new Map();
-    for(let x of nums){
-        map.set(x, (map.get(x) || 0) +1);
-        if(map.get(x) > 1) return true;
+    for (let x of nums) {
+        if (map.get(x) > 0) return true;
+        map.set(x, 1);
     }
     return false;
 
